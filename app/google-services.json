@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "47680283074",
+    "project_id": "commune-7ae28",
+    "storage_bucket": "commune-7ae28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47680283074:android:720937633496651fb8365b",
+        "android_client_info": {
+          "package_name": "com.alth.events"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47680283074-bma236ajsf1pb1q7127tis7cefacktm0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAYPZvk-al1qthMmTyxaUt0zxd8S7Vefg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47680283074-bma236ajsf1pb1q7127tis7cefacktm0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
