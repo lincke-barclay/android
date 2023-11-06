@@ -1,6 +1,5 @@
 package com.alth.events.repositories.impl
 
-import android.util.Log
 import com.alth.events.di.ApplicationScope
 import com.alth.events.models.network.events.egress.POSTEventRequestDTO
 import com.alth.events.models.network.events.ingress.MinimalEventListResponseDto

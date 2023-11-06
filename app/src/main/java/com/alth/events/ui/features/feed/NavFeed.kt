@@ -5,9 +5,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.alth.events.ui.navigation.BottomAppBarRoute
 import com.alth.events.ui.viewmodels.FeedMainViewModel
 import com.alth.events.ui.viewmodels.NewEventViewModel
-import com.alth.events.ui.navigation.BottomAppBarRoute
 
 fun NavGraphBuilder.feedNavGraph(navController: NavController) {
     navigation(startDestination = "feed/main", route = BottomAppBarRoute.Feed.route) {

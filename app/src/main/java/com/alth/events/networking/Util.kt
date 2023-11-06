@@ -1,6 +1,5 @@
 package com.alth.events.networking
 
-import android.util.Log
 import com.alth.events.authentication.sources.AuthenticationDataSource
 import com.alth.events.authentication.sources.withIDAndTokenOrThrow
 import com.alth.events.models.network.NetworkResult

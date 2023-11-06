@@ -13,8 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.alth.events.models.domain.authentication.AuthenticationState
 import com.alth.events.ui.components.IndeterminateCircularIndicator
-import com.alth.events.ui.viewmodels.AuthenticationViewModel
 import com.alth.events.ui.layouts.BottomAppNavTheme
+import com.alth.events.ui.viewmodels.AuthenticationViewModel
 
 @Composable
 fun AuthenticationStateEntryPoint(
