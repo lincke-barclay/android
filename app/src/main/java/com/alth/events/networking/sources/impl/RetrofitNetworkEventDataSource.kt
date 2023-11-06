@@ -1,5 +1,6 @@
 package com.alth.events.networking.sources.impl
 
+import android.util.Log
 import com.alth.events.authentication.sources.AuthenticationDataSource
 import com.alth.events.models.network.events.egress.POSTEventRequestDTO
 import com.alth.events.networking.apis.EventsApi
@@ -13,6 +14,8 @@ class RetrofitNetworkEventDataSource @Inject constructor(
 ) : NetworkEventDataSource {
     override suspend fun getFeedForUser(page: Int, pageSize: Int) =
         authenticationDataSource.withIDAndTokenOrThrowNetworkExec { id, token ->
+            Log.d("HERE id", id)
+            Log.d("HERE token", token)
             eventsApi.getFeedForUser(
                 token = token,
                 userId = id,

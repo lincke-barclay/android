@@ -11,13 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.alth.events.models.domain.users.PublicUser
+import com.alth.events.models.network.users.ingress.PublicUserResponseDto
 import com.alth.events.ui.components.UserHorizontalBarItem
 
 @Composable
 fun FeedTitle(
     title: String,
-    organizer: PublicUser,
+    organizer: PublicUserResponseDto,
     date: String,
 ) {
     Column(

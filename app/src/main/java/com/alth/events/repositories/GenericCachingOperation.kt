@@ -56,10 +56,10 @@ abstract class GenericCachingOperation<T>(
         class Failure<T> : InternalCacheResult<T>
     }
 
-    protected fun <A, T> NetworkResult<A>.toInternalCacheResult(toDomain: A.() -> T): InternalCacheResult<T> {
+    protected fun <T> NetworkResult<T>.toInternalCacheResult(): InternalCacheResult<T> {
         return when (this) {
             is NetworkResult.Success -> {
-                InternalCacheResult.Success(t.toDomain())
+                InternalCacheResult.Success(t)
             }
 
             else -> {

@@ -9,16 +9,17 @@ fun FeedItem(
     feedCardUIState: FeedCardUIState,
 ) {
     val event = feedCardUIState.feedEvent
+    val organizer = feedCardUIState.owner
 
     Column {
         FeedTitle(
             title = event.title,
-            organizer = event.organizer,
+            organizer = organizer,
             date = event.startDateTime.toString(),
         )
         FeedItemContent(
             content = event.longDescription,
-            imageUrls = event.images.map { it.url },
+            imageUrls = listOf(),
         )
     }
 }

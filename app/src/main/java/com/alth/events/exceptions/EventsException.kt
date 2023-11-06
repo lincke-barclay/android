@@ -16,3 +16,8 @@ class IllegalAuthenticationStateException(
     message: String? = null,
     cause: Throwable? = null,
 ) : EventsException(message, cause)
+
+class ApiException(
+    message: String? = null,
+    cause: Throwable? = null,
+) : EventsException(message, cause)

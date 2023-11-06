@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alth.events.exceptions.IllegalOperationException
-import com.alth.events.models.domain.events.NewEventRequest
+import com.alth.events.models.network.events.egress.POSTEventRequestDTO
 import com.alth.events.repositories.CachingEventRepository
 import com.alth.events.ui.util.toUiString
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -79,11 +79,7 @@ class NewEventViewModel @Inject constructor(
         if (uiState.value.canSubmit) {
             viewModelScope.launch {
                 _uiState.value = uiState.value.copy(loading = true)
-                cachingEventRepository.addNewEvent(
-                    transformUiNewEventFormToDomainNewEventRequest(
-                        uiState.value
-                    )
-                )
+                cachingEventRepository.addNewEvent(uiState.value.toPOSTEventRequest())
                 _uiState.value = uiState.value.copy(loading = false)
                 onComplete()
             }
@@ -128,16 +124,10 @@ class NewEventViewModel @Inject constructor(
     }
 }
 
-fun transformUiNewEventFormToDomainNewEventRequest(
-    newEventUiState: NewEventUiState,
-): NewEventRequest {
-    return with(newEventUiState) {
-        NewEventRequest(
-            title = enteredTitle,
-            shortDescription = enteredShortDescription,
-            longDescription = enteredLongDescription,
-            startDateTime = enteredStartDate,
-            endDateTime = enteredEndDate,
-        )
-    }
-}
+fun NewEventUiState.toPOSTEventRequest() = POSTEventRequestDTO(
+    title = enteredTitle,
+    shortDescription = enteredShortDescription,
+    longDescription = enteredLongDescription,
+    startingDateTime = enteredStartDate,
+    endingDateTime = enteredEndDate,
+)

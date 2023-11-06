@@ -1,15 +1,17 @@
 package com.alth.events.repositories
 
-import com.alth.events.models.domain.events.FeedEvent
-import com.alth.events.models.domain.events.NewEventRequest
-import com.alth.events.models.domain.events.SuggestedEvent
+import com.alth.events.models.network.events.egress.POSTEventRequestDTO
+import com.alth.events.models.network.events.ingress.MinimalEventListResponseDto
 
 interface CachingEventRepository {
-    suspend fun addNewEvent(newEventRequest: NewEventRequest)
+    suspend fun addNewEvent(newEventRequest: POSTEventRequestDTO)
     suspend fun getSuggestedEvents(
         page: Int,
         pageSize: Int
-    ): GenericCachingOperation<List<SuggestedEvent>>
+    ): GenericCachingOperation<MinimalEventListResponseDto>
 
-    suspend fun getFeed(page: Int, pageSize: Int): GenericCachingOperation<List<FeedEvent>>
+    suspend fun getFeed(
+        page: Int,
+        pageSize: Int
+    ): GenericCachingOperation<MinimalEventListResponseDto>
 }

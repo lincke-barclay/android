@@ -1,8 +1,8 @@
 package com.alth.events.networking.apis
 
 import com.alth.events.models.network.events.egress.POSTEventRequestDTO
-import com.alth.events.models.network.events.ingress.GETPrivateEventResponseDTO
-import com.alth.events.models.network.events.ingress.GETPublicEventResponseDTO
+import com.alth.events.models.network.events.ingress.MinimalEventListResponseDto
+import com.alth.events.models.network.events.ingress.PrivateEventResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -18,7 +18,7 @@ interface EventsApi {
         @Path("userId") userId: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
-    ): List<GETPublicEventResponseDTO>
+    ): MinimalEventListResponseDto
 
     @GET("/users/{userId}/events/suggested")
     suspend fun getSuggestedEventsForUser(
@@ -26,7 +26,7 @@ interface EventsApi {
         @Path("userId") userId: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
-    ): List<GETPublicEventResponseDTO>
+    ): MinimalEventListResponseDto
 
     @GET("/users/{userId}/events")
     suspend fun getPrivateEvents(
@@ -34,14 +34,14 @@ interface EventsApi {
         @Path("userId") userId: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
-    ): List<GETPrivateEventResponseDTO>
+    ): MinimalEventListResponseDto
 
     @POST("/users/{userId}/events")
     suspend fun createEvent(
         @Header("Authorization") token: String,
         @Path("userId") userId: String,
         @Body body: POSTEventRequestDTO,
-    ): GETPrivateEventResponseDTO
+    ): PrivateEventResponseDto
 
     @DELETE("/users/{userId}/events/{eventId}")
     suspend fun deleteEvent(

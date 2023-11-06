@@ -1,6 +1,6 @@
 package com.alth.events.networking.apis
 
-import com.alth.events.models.network.users.ingress.GETPublicUserResponseDTO
+import com.alth.events.models.network.users.ingress.PublicUserResponseDto
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -15,31 +15,31 @@ interface FriendsApi {
         @Path("userId") userId: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
-    ): List<GETPublicUserResponseDTO>
+    ): List<PublicUserResponseDto>
 
-    @GET("/users/{userId}/pending-friends/from-me")
+    @GET("/users/{userId}/friends/pending/from-me")
     suspend fun getFriendsIRequested(
         @Header("Authorization") token: String,
         @Path("userId") userId: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
-    ): List<GETPublicUserResponseDTO>
+    ): List<PublicUserResponseDto>
 
-    @GET("/users/{userId}/pending-friends/to-me")
+    @GET("/users/{userId}/friends/pending/to-me")
     suspend fun getFriendsRequestedToMe(
         @Header("Authorization") token: String,
         @Path("userId") userId: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
-    ): List<GETPublicUserResponseDTO>
+    ): List<PublicUserResponseDto>
 
-    @GET("/users/{userId}/suggested-friends")
+    @GET("/users/{userId}/friends/suggested")
     suspend fun getSuggestedFriends(
         @Header("Authorization") token: String,
         @Path("userId") userId: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
-    ): List<GETPublicUserResponseDTO>
+    ): List<PublicUserResponseDto>
 
     @POST("/users/{requesterId}/friends/{recipientId}")
     suspend fun postFriendship(

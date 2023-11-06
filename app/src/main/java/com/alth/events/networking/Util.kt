@@ -1,16 +1,14 @@
 package com.alth.events.networking
 
+import android.util.Log
 import com.alth.events.authentication.sources.AuthenticationDataSource
 import com.alth.events.authentication.sources.withIDAndTokenOrThrow
 import com.alth.events.models.network.NetworkResult
-import retrofit2.HttpException
 import java.io.IOException
 
 suspend fun <T> runNetworkCatching(block: suspend () -> T): NetworkResult<T> {
     return try {
         NetworkResult.Success(block())
-    } catch (e: HttpException) {
-        NetworkResult.APIFailure(e)
     } catch (e: IOException) {
         NetworkResult.IOFailure(e)
     }
@@ -21,7 +19,7 @@ suspend fun <T> AuthenticationDataSource.withIDAndTokenOrThrowNetworkExec(
 ): NetworkResult<T> {
     return withIDAndTokenOrThrow { id, token ->
         runNetworkCatching {
-            block(id, "Bearer: $token")
+            block(id, "Bearer $token")
         }
     }
 }

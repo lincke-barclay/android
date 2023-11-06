@@ -1,31 +1,30 @@
 package com.alth.events.networking.sources
 
-import com.alth.events.models.domain.users.PublicUser
 import com.alth.events.models.network.NetworkResult
-import com.alth.events.models.network.users.ingress.GETPublicUserResponseDTO
+import com.alth.events.models.network.users.ingress.PublicUserResponseDto
 
 interface NetworkFriendshipDataSource {
     suspend fun getMyConfirmedFriends(
         page: Int,
         pageSize: Int
-    ): NetworkResult<List<GETPublicUserResponseDTO>>
+    ): NetworkResult<List<PublicUserResponseDto>>
 
     suspend fun getFriendsIRequested(
         page: Int,
         pageSize: Int
-    ): NetworkResult<List<GETPublicUserResponseDTO>>
+    ): NetworkResult<List<PublicUserResponseDto>>
 
     suspend fun getFriendsRequestedToMe(
         page: Int,
         pageSize: Int
-    ): NetworkResult<List<GETPublicUserResponseDTO>>
+    ): NetworkResult<List<PublicUserResponseDto>>
 
     suspend fun getSuggestedFriends(
         page: Int,
         pageSize: Int
-    ): NetworkResult<List<GETPublicUserResponseDTO>>
+    ): NetworkResult<List<PublicUserResponseDto>>
 
-    suspend fun postFriendship(publicUser: PublicUser): NetworkResult<Unit>
-    suspend fun deleteFriendship(publicUser: PublicUser): NetworkResult<Unit>
+    suspend fun postFriendship(recipientId: String): NetworkResult<Unit>
+    suspend fun deleteFriendship(recipientId: String): NetworkResult<Unit>
 }
 

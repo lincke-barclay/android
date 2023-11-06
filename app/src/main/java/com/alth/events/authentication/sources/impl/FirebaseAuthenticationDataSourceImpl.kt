@@ -172,11 +172,9 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
                         it.user.getIdToken(false)
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
-                                    logger.info(task.result.token ?: "Nothing")
                                     continuation.resume(task.result.token)
                                 } else {
                                     continuation.resume(null)
-                                    TODO("App Says user is signed in but no firebase token")
                                 }
                             }
                     }

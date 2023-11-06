@@ -1,6 +1,5 @@
 package com.alth.events.models.network.events.egress
 
-import com.alth.events.models.domain.events.NewEventRequest
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
@@ -11,13 +10,5 @@ data class POSTEventRequestDTO(
     val longDescription: String,
     val startingDateTime: Instant,
     val endingDateTime: Instant
-)
-
-fun NewEventRequest.toPOSTEventRequestDTO() = POSTEventRequestDTO(
-    title = title,
-    shortDescription = shortDescription,
-    longDescription = longDescription,
-    startingDateTime = startDateTime,
-    endingDateTime = endDateTime,
 )
 

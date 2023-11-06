@@ -1,28 +1,28 @@
 package com.alth.events.repositories
 
-import com.alth.events.models.domain.users.PublicUser
+import com.alth.events.models.network.users.ingress.PublicUserResponseDto
 
 interface CachingFriendshipRepository {
     suspend fun getMyConfirmedFriends(
         page: Int,
         pageSize: Int
-    ): GenericCachingOperation<List<PublicUser>>
+    ): GenericCachingOperation<List<PublicUserResponseDto>>
 
     suspend fun getPendingFriendsThatISent(
         page: Int,
         pageSize: Int
-    ): GenericCachingOperation<List<PublicUser>>
+    ): GenericCachingOperation<List<PublicUserResponseDto>>
 
     suspend fun getPendingFriendsSentToMe(
         page: Int,
         pageSize: Int
-    ): GenericCachingOperation<List<PublicUser>>
+    ): GenericCachingOperation<List<PublicUserResponseDto>>
 
     suspend fun getSuggestedFriends(
         page: Int,
         pageSize: Int
-    ): GenericCachingOperation<List<PublicUser>>
+    ): GenericCachingOperation<List<PublicUserResponseDto>>
 
-    suspend fun postFriend(publicUser: PublicUser)
-    suspend fun deleteFriend(publicUser: PublicUser)
+    suspend fun postFriend(recipientId: String)
+    suspend fun deleteFriend(recipientId: String)
 }

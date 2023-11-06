@@ -11,11 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.alth.events.models.domain.users.PublicUser
+import com.alth.events.models.network.users.ingress.PublicUserResponseDto
 
 @Composable
 fun UserHorizontalBarItem(
-    organizer: PublicUser,
+    organizer: PublicUserResponseDto,
     trailingText: (name: String) -> String = { it },
     rightJustifiedContent: @Composable () -> Unit = {},
 ) {
@@ -49,7 +49,7 @@ fun UserHorizontalBarItem(
                 Text("Profile Pic")
             }
             Text(
-                text = trailingText(organizer.firstName),
+                text = trailingText(organizer.name),
                 style = MaterialTheme.typography.labelMedium
             )
         }

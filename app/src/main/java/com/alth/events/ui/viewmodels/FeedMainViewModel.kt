@@ -1,9 +1,10 @@
 package com.alth.events.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alth.events.models.domain.events.FeedEvent
+import com.alth.events.exceptions.ApiException
+import com.alth.events.models.network.events.ingress.PublicEventResponseDto
+import com.alth.events.models.network.users.ingress.PublicUserResponseDto
 import com.alth.events.repositories.CachingEventRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,12 +18,9 @@ data class FeedUiState(
 )
 
 data class FeedCardUIState(
-    val feedEvent: FeedEvent,
-) {
-    companion object {
-        fun initFromEvent(feedEvent: FeedEvent) = FeedCardUIState(feedEvent)
-    }
-}
+    val feedEvent: PublicEventResponseDto,
+    val owner: PublicUserResponseDto,
+)
 
 @HiltViewModel
 class FeedMainViewModel @Inject constructor(
@@ -38,11 +36,13 @@ class FeedMainViewModel @Inject constructor(
     private fun refresh() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(loading = true)
-            val feedCacheResult = eventRepository.getFeed(0, 10)(true)
+            val feedCacheResult = eventRepository.getFeed(0, 10)(true).t
 
-            // TODO handle errors
-            val feed = feedCacheResult.t
-                .map(FeedCardUIState.Companion::initFromEvent)
+            val feed = feedCacheResult.publicEvents.map { event ->
+                feedCacheResult.publicUsers[event.ownerId]?.let { owner ->
+                    FeedCardUIState(feedEvent = event, owner = owner)
+                } ?: throw ApiException("Expected all users to be full")
+            }
 
             _uiState.value = _uiState.value.copy(events = feed, loading = false)
         }
