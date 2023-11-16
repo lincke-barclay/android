@@ -20,9 +20,10 @@ interface CachingFriendshipRepository {
 
     suspend fun getSuggestedFriends(
         page: Int,
-        pageSize: Int
+        pageSize: Int,
+        queryStr: String,
     ): GenericCachingOperation<List<PublicUserResponseDto>>
 
-    suspend fun postFriend(recipientId: String)
+    suspend fun sendFriendRequest(recipientId: String)
     suspend fun deleteFriend(recipientId: String)
 }

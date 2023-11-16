@@ -14,6 +14,7 @@ interface NetworkEventDataSource {
     suspend fun getSuggestedEventsForUser(
         page: Int,
         pageSize: Int,
+        queryStr: String,
     ): NetworkResult<MinimalEventListResponseDto>
 
     suspend fun getPrivateEvents(

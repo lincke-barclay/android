@@ -52,6 +52,7 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
         this.owner = owner
     }
 
+    //765cuez0mf@rfcdrive.com
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
         refresh()
@@ -84,6 +85,7 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
                         "Successfully signed in but " +
                                 "user is null! This is a firebase problem"
                     )
+                    sendVerificationEmailForCurrentlySignedInUser()
                 } else {
                     logger.error(task.exception?.stackTraceToString() ?: "Error ")
                     TODO("login fails")
@@ -96,14 +98,28 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
     }
 
     private fun refresh() {
+        loggerFactory.getLogger(this)
+            .debug("Refreshing user state in data source. User was: ${currentlySignedInUser.value}")
         _currentlySignedInUser.value = auth.currentUser?.let {
+            loggerFactory.getLogger(this).debug("Refresh: New state is signed in: $it")
             FirebaseAuthenticationState.SignedIn(it)
-        } ?: FirebaseAuthenticationState.SignedOut
+        } ?: run {
+            loggerFactory.getLogger(this).debug("Refresh: Not signed in - nothing changed")
+            FirebaseAuthenticationState.SignedOut
+        }
     }
 
     override fun reload() {
-        FirebaseAuth.getInstance().currentUser?.reload()
-        refresh()
+        loggerFactory.getLogger(this)
+            .debug("Reloading auth state, current state is: ${currentlySignedInUser.value}")
+        FirebaseAuth.getInstance().currentUser?.reload()?.addOnCompleteListener { it ->
+            if (it.isSuccessful) {
+                refresh()
+            } else {
+                loggerFactory.getLogger(this)
+                    .debug("Couldn't reload firebase user, reason: ${it.exception}")
+            }
+        }
     }
 
     override fun sendVerificationEmailForCurrentlySignedInUser() {
@@ -136,10 +152,12 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
                     it.user.updateProfile(profileUpdates)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                Log.d("Update", "User Profile Updated")
+                                loggerFactory.getLogger(this)
+                                    .debug("Successfully changed user name to $newName")
                                 reload()
                             } else {
-                                TODO("Handle Error on change Name")
+                                loggerFactory.getLogger(this)
+                                    .error("Couldn't change user ${currentlySignedInUser.value} name to $newName")
                             }
                         }
                 }
@@ -164,12 +182,12 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
         }
     }
 
-    override suspend fun getAuthenticationTokenOrNull() =
+    override suspend fun getAuthenticationTokenOrNull(forceRefresh: Boolean) =
         suspendCancellableCoroutine { continuation ->
             _currentlySignedInUser.value.let {
                 when (it) {
                     is FirebaseAuthenticationState.SignedIn -> {
-                        it.user.getIdToken(false)
+                        it.user.getIdToken(forceRefresh)
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
                                     continuation.resume(task.result.token)

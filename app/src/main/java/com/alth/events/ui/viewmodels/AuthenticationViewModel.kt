@@ -10,39 +10,15 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthenticationViewModel @Inject constructor(
-    private val authenticationRepository: AuthenticationRepository,
+open class AuthenticationViewModel @Inject constructor(
+    authenticationRepository: AuthenticationRepository,
 ) : ViewModel() {
 
-    val uiState = authenticationRepository
+    val currentlySignedInState = authenticationRepository
         .authenticationState
         .stateIn(
             viewModelScope,
             initialValue = AuthenticationState.Unknown,
             started = SharingStarted.WhileSubscribed(),
         )
-
-    fun signIn(email: String, password: String) {
-        authenticationRepository.signIn(email, password)
-    }
-
-    fun signOut() {
-        authenticationRepository.signOut()
-    }
-
-    fun signUp(email: String, password: String) {
-        authenticationRepository.signUp(email, password)
-    }
-
-    fun onClickSendVerificationEmail() {
-        authenticationRepository.sendVerificationEmailForCurrentlySignedInUser()
-    }
-
-    fun reload() {
-        authenticationRepository.reload()
-    }
-
-    fun changeName(newName: String) {
-        authenticationRepository.changeNameOfCurrentlySignedInUser(newName)
-    }
 }

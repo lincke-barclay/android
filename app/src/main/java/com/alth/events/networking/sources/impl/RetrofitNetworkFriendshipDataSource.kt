@@ -49,13 +49,15 @@ class RetrofitNetworkFriendshipDataSource @Inject constructor(
 
     override suspend fun getSuggestedFriends(
         page: Int,
-        pageSize: Int
+        pageSize: Int,
+        queryStr: String,
     ) = authenticationDataSource.withIDAndTokenOrThrowNetworkExec { id, token ->
         friendsApi.getSuggestedFriends(
             token = token,
             userId = id,
             page = page,
             pageSize = pageSize,
+            queryStr,
         )
     }
 

@@ -21,7 +21,8 @@ interface NetworkFriendshipDataSource {
 
     suspend fun getSuggestedFriends(
         page: Int,
-        pageSize: Int
+        pageSize: Int,
+        queryStr: String,
     ): NetworkResult<List<PublicUserResponseDto>>
 
     suspend fun postFriendship(recipientId: String): NetworkResult<Unit>

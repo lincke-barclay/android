@@ -6,5 +6,9 @@ import kotlinx.serialization.Serializable
 data class PublicUserResponseDto(
     val id: String,
     val name: String,
-)
+) {
+    companion object {
+        fun empty() = PublicUserResponseDto("", "")
+    }
+}
 

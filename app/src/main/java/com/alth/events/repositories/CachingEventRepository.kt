@@ -7,7 +7,8 @@ interface CachingEventRepository {
     suspend fun addNewEvent(newEventRequest: POSTEventRequestDTO)
     suspend fun getSuggestedEvents(
         page: Int,
-        pageSize: Int
+        pageSize: Int,
+        queryStr: String,
     ): GenericCachingOperation<MinimalEventListResponseDto>
 
     suspend fun getFeed(

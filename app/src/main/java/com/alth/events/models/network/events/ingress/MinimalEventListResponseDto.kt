@@ -11,4 +11,15 @@ data class MinimalEventListResponseDto(
     companion object {
         fun empty() = MinimalEventListResponseDto(listOf(), HashMap())
     }
+
+    fun append(resp: MinimalEventListResponseDto): MinimalEventListResponseDto {
+        val newPublicUsers = HashMap<String, PublicUserResponseDto>()
+        newPublicUsers.putAll(publicUsers)
+        newPublicUsers.putAll(resp.publicUsers)
+
+        return MinimalEventListResponseDto(
+            publicEvents = publicEvents + resp.publicEvents,
+            publicUsers = newPublicUsers
+        )
+    }
 }

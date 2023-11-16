@@ -1,6 +1,5 @@
 package com.alth.events.ui.features.feed
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,7 +16,6 @@ import com.alth.events.ui.features.feed.components.StatefulLazyListFeed
 import com.alth.events.ui.viewmodels.FeedMainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FeedMain(
     feedMainViewModel: FeedMainViewModel,

@@ -39,6 +39,7 @@ interface FriendsApi {
         @Path("userId") userId: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
+        @Query("queryStr") queryStr: String,
     ): List<PublicUserResponseDto>
 
     @POST("/users/{requesterId}/friends/{recipientId}")

@@ -26,6 +26,7 @@ interface EventsApi {
         @Path("userId") userId: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
+        @Query("queryStr") queryStr: String,
     ): MinimalEventListResponseDto
 
     @GET("/users/{userId}/events")

@@ -1,21 +1,28 @@
 package com.alth.events.ui.features.search.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.alth.events.models.domain.users.PublicUser
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import com.alth.events.models.network.users.ingress.PublicUserResponseDto
 
 @Composable
 fun SearchResultUserView(
-    user: PublicUser,
-    sendFriendRequest: (user: PublicUser) -> Unit,
+    user: PublicUserResponseDto,
+    onClickOnUser: (user: PublicUserResponseDto) -> Unit,
 ) {
-    Row {
-        Text("Name: ")
-        Text(user.firstName)
-        Button(onClick = { sendFriendRequest(user) }) {
-            Text("Request Friend")
-        }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClickOnUser(user) }
+            .background(color = Color.Red),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(user.name)
     }
 }

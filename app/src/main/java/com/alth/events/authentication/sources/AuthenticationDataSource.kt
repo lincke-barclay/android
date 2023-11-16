@@ -12,5 +12,5 @@ interface AuthenticationDataSource {
     fun sendVerificationEmailForCurrentlySignedInUser()
     fun changeNameOfCurrentlySignedInUser(newName: String)
     fun getSignedInUserIdOrNull(): String?
-    suspend fun getAuthenticationTokenOrNull(): String?
+    suspend fun getAuthenticationTokenOrNull(forceRefresh: Boolean = true): String?
 }

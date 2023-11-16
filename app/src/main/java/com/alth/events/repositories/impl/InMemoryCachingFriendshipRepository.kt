@@ -84,10 +84,11 @@ class InMemoryCachingFriendshipRepository @Inject constructor(
 
     override suspend fun getSuggestedFriends(
         page: Int,
-        pageSize: Int
+        pageSize: Int,
+        queryStr: String,
     ) = object : GenericCachingOperation<List<PublicUserResponseDto>>(appScope, listOf()) {
         override suspend fun getFromSourceOfTruth(): InternalCacheResult<List<PublicUserResponseDto>> {
-            return networkFriendshipDataSource.getSuggestedFriends(page, pageSize)
+            return networkFriendshipDataSource.getSuggestedFriends(page, pageSize, queryStr)
                 .toInternalCacheResult()
         }
 
@@ -101,7 +102,7 @@ class InMemoryCachingFriendshipRepository @Inject constructor(
         }
     }
 
-    override suspend fun postFriend(recipientId: String) {
+    override suspend fun sendFriendRequest(recipientId: String) {
         networkFriendshipDataSource.postFriendship(recipientId)
     }
 

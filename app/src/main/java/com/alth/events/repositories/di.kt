@@ -3,6 +3,7 @@ package com.alth.events.repositories
 import com.alth.events.repositories.impl.FirebaseAuthenticationRepository
 import com.alth.events.repositories.impl.InMemoryCachingEventsRepository
 import com.alth.events.repositories.impl.InMemoryCachingFriendshipRepository
+import com.alth.events.repositories.impl.InMemoryCachingUserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,4 +26,9 @@ abstract class RepositoryModule {
     abstract fun bindAuthenticationRepository(
         ar: FirebaseAuthenticationRepository,
     ): AuthenticationRepository
+
+    @Binds
+    abstract fun bindUserRepository(
+        ur: InMemoryCachingUserRepository,
+    ): CachingUserRepository
 }

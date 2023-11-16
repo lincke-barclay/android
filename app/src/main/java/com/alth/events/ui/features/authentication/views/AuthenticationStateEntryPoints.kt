@@ -11,37 +11,35 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.alth.events.models.domain.authentication.AuthenticationState
 import com.alth.events.ui.components.IndeterminateCircularIndicator
 import com.alth.events.ui.layouts.BottomAppNavTheme
 import com.alth.events.ui.viewmodels.AuthenticationViewModel
+import com.alth.events.ui.viewmodels.landing.EditProfileViewModel
+import com.alth.events.ui.viewmodels.landing.EmailVerificationViewModel
+import com.alth.events.ui.viewmodels.landing.SignInViewModel
 
 @Composable
 fun AuthenticationStateEntryPoint(
     viewModel: AuthenticationViewModel,
 ) {
-    val authState by viewModel.uiState.collectAsState()
+    val authState by viewModel.currentlySignedInState.collectAsState()
 
     authState.let {
         when (it) {
             is AuthenticationState.UserOk -> {
-                UserOkEntryPoint(
-                    userOk = it,
-                    signOutCallback = viewModel::signOut
-                )
+                UserOkEntryPoint()
             }
 
             is AuthenticationState.UserUnverified -> {
                 UserUnverifiedEntryPoint(
-                    sendVerificationEmailCallback = viewModel::onClickSendVerificationEmail,
-                    tryAgainCallback = viewModel::reload,
+
                 )
             }
 
             is AuthenticationState.UserUninitialized -> {
-                UserUninitializedEntryPoint(
-                    submitNameData = viewModel::changeName,
-                )
+                UserUninitializedEntryPoint()
             }
 
             is AuthenticationState.Unknown -> {
@@ -49,32 +47,35 @@ fun AuthenticationStateEntryPoint(
             }
 
             is AuthenticationState.SignedOut -> {
-                SignedOutEntryPoint(viewModel::signIn, viewModel::signUp)
+                SignedOutEntryPoint()
             }
         }
     }
 }
 
 @Composable
-fun UserOkEntryPoint(
-    userOk: AuthenticationState.UserOk,
-    signOutCallback: () -> Unit,
-) {
-    BottomAppNavTheme(userOk, signOutCallback)
+fun UserOkEntryPoint() {
+    BottomAppNavTheme()
 }
 
 @Composable
 fun UserUnverifiedEntryPoint(
-    sendVerificationEmailCallback: () -> Unit,
-    tryAgainCallback: () -> Unit,
+    emailVerificationViewModel: EmailVerificationViewModel = hiltViewModel()
 ) {
     Column {
         Text("Signed In but unverified")
-        Button(onClick = sendVerificationEmailCallback) {
+        Button(
+            onClick = emailVerificationViewModel::onClickSendVerificationEmail
+        ) {
             Text("Send Verification Email")
         }
-        Button(onClick = tryAgainCallback) {
+        Button(
+            onClick = emailVerificationViewModel::reload
+        ) {
             Text("Try Again")
+        }
+        Button(onClick = { emailVerificationViewModel.signOut() }) {
+            Text("Sign Out")
         }
     }
 }
@@ -82,14 +83,19 @@ fun UserUnverifiedEntryPoint(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserUninitializedEntryPoint(
-    submitNameData: (String) -> Unit,
+    editProfileViewModel: EditProfileViewModel = hiltViewModel()
 ) {
     var enteredName by remember { mutableStateOf("") }
     Column {
         Text("Name:")
         TextField(value = enteredName, onValueChange = { enteredName = it })
-        Button(enabled = enteredName.isNotEmpty(), onClick = { submitNameData(enteredName) }) {
+        Button(
+            enabled = enteredName.isNotEmpty(),
+            onClick = { editProfileViewModel.changeName(enteredName) }) {
             Text("Create Profile")
+        }
+        Button(onClick = { editProfileViewModel.signOut() }) {
+            Text("Sign Out")
         }
     }
 }
@@ -102,8 +108,7 @@ fun UnknownEntryPoint() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignedOutEntryPoint(
-    onSignInCallback: (String, String) -> Unit,
-    onSignUpCallback: (String, String) -> Unit,
+    viewModel: SignInViewModel = hiltViewModel()
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -115,10 +120,10 @@ fun SignedOutEntryPoint(
         Text("Password:")
         TextField(value = password, onValueChange = { password = it })
 
-        Button(onClick = { onSignInCallback(email, password) }) {
+        Button(onClick = { viewModel.signIn(email, password) }) {
             Text("Sign In")
         }
-        Button(onClick = { onSignUpCallback(email, password) }) {
+        Button(onClick = { viewModel.signUp(email, password) }) {
             Text("Sign Up")
         }
     }

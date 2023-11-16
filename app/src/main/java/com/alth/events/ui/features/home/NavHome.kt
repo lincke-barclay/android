@@ -1,16 +1,18 @@
-package com.alth.events.ui.features.feed
+package com.alth.events.ui.features.home
 
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.alth.events.ui.features.feed.FeedMain
+import com.alth.events.ui.features.feed.NewFeedMain
 import com.alth.events.ui.navigation.BottomAppBarRoute
 import com.alth.events.ui.viewmodels.FeedMainViewModel
 import com.alth.events.ui.viewmodels.NewEventViewModel
 
-fun NavGraphBuilder.feedNavGraph(navController: NavController) {
-    navigation(startDestination = "feed/main", route = BottomAppBarRoute.Feed.route) {
+fun NavGraphBuilder.homeNavGraph(navController: NavController) {
+    navigation(startDestination = "feed/main", route = BottomAppBarRoute.Home.route) {
         composable("feed/main") {
             val feedMainViewModel: FeedMainViewModel = hiltViewModel()
             FeedMain(
@@ -23,7 +25,7 @@ fun NavGraphBuilder.feedNavGraph(navController: NavController) {
         composable("feed/newEvent") {
             val newEventViewModel: NewEventViewModel = hiltViewModel()
             NewFeedMain(newEventViewModel) {
-                navController.navigate(BottomAppBarRoute.Feed.route)
+                navController.navigate(BottomAppBarRoute.Home.route)
             }
         }
     }

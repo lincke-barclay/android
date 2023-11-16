@@ -23,23 +23,26 @@ class InMemoryCachingEventsRepository @Inject constructor(
         networkEventDataSource.createEvent(newEventRequest)
     }
 
-    override suspend fun getSuggestedEvents(page: Int, pageSize: Int) =
-        object : GenericCachingOperation<MinimalEventListResponseDto>(
-            appScope,
-            MinimalEventListResponseDto.empty()
-        ) {
-            override suspend fun getFromSourceOfTruth() =
-                networkEventDataSource.getSuggestedEventsForUser(page, pageSize)
-                    .toInternalCacheResult()
+    override suspend fun getSuggestedEvents(
+        page: Int,
+        pageSize: Int,
+        queryStr: String,
+    ) = object : GenericCachingOperation<MinimalEventListResponseDto>(
+        appScope,
+        MinimalEventListResponseDto.empty()
+    ) {
+        override suspend fun getFromSourceOfTruth() =
+            networkEventDataSource.getSuggestedEventsForUser(page, pageSize, queryStr)
+                .toInternalCacheResult()
 
-            override suspend fun getFromCache() = InternalCacheResult.Success(suggestedEvents)
+        override suspend fun getFromCache() = InternalCacheResult.Success(suggestedEvents)
 
-            override suspend fun saveToCache(t: MinimalEventListResponseDto): InternalCacheResult<Unit> {
-                suggestedEvents = t
-                return InternalCacheResult.Success(Unit)
-            }
-
+        override suspend fun saveToCache(t: MinimalEventListResponseDto): InternalCacheResult<Unit> {
+            suggestedEvents = t
+            return InternalCacheResult.Success(Unit)
         }
+
+    }
 
     override suspend fun getFeed(page: Int, pageSize: Int) =
         object : GenericCachingOperation<MinimalEventListResponseDto>(

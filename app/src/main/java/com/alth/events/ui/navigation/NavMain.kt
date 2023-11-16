@@ -2,29 +2,38 @@ package com.alth.events.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.alth.events.models.domain.authentication.AuthenticationState
-import com.alth.events.ui.features.feed.feedNavGraph
-import com.alth.events.ui.features.profile.ProfileMain
+import androidx.navigation.navArgument
+import com.alth.events.ui.features.home.homeNavGraph
+import com.alth.events.ui.features.myprofile.MyProfileMain
+import com.alth.events.ui.features.otherprofile.OtherProfile
 import com.alth.events.ui.features.search.searchNavGraph
 
 @Composable
 fun NavMain(
     navHostController: NavHostController,
     modifier: Modifier,
-    user: AuthenticationState.UserOk,
-    onSignOut: () -> Unit,
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = BottomAppBarRoute.Feed.route,
+        startDestination = BottomAppBarRoute.Home.route,
         modifier = modifier,
     ) {
-        feedNavGraph(navHostController)
+        homeNavGraph(navHostController)
         composable(BottomAppBarRoute.Profile.route) {
-            ProfileMain(user, onSignOut)
+            MyProfileMain()
+        }
+        composable(
+            "users/{userId}",
+            arguments = listOf(navArgument("userId") { type = NavType.StringType })
+        ) {
+            navHostController.currentBackStackEntry?.arguments?.getString("userId")?.let {
+                OtherProfile(hiltViewModel())
+            }
         }
         searchNavGraph(navHostController)
     }
