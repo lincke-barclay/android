@@ -1,8 +1,12 @@
 package com.alth.events.networking.apis
 
-import com.alth.events.models.network.events.egress.POSTEventRequestDTO
-import com.alth.events.models.network.events.ingress.MinimalEventListResponseDto
-import com.alth.events.models.network.events.ingress.PrivateEventResponseDto
+import com.alth.events.networking.models.PrivateEventSortBy
+import com.alth.events.networking.models.PublicEventSortBy
+import com.alth.events.networking.models.SortDirection
+import com.alth.events.networking.models.events.egress.POSTEventRequestDTO
+import com.alth.events.networking.models.events.ingress.MinimalEventListResponseDto
+import com.alth.events.networking.models.events.ingress.PrivateEventResponseDto
+import kotlinx.datetime.Instant
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -12,30 +16,19 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface EventsApi {
-    @GET("/users/{userId}/events/feed")
-    suspend fun getFeedForUser(
-        @Header("Authorization") token: String,
-        @Path("userId") userId: String,
-        @Query("page") page: Int,
-        @Query("pageSize") pageSize: Int,
-    ): MinimalEventListResponseDto
-
-    @GET("/users/{userId}/events/suggested")
-    suspend fun getSuggestedEventsForUser(
-        @Header("Authorization") token: String,
-        @Path("userId") userId: String,
-        @Query("page") page: Int,
-        @Query("pageSize") pageSize: Int,
-        @Query("queryStr") queryStr: String,
-    ): MinimalEventListResponseDto
-
     @GET("/users/{userId}/events")
-    suspend fun getPrivateEvents(
+    suspend fun getEventsOfUserWithQueryParameters(
         @Header("Authorization") token: String,
         @Path("userId") userId: String,
-        @Query("page") page: Int,
-        @Query("pageSize") pageSize: Int,
-    ): MinimalEventListResponseDto
+        @Query("fromStartDateTimeINC") fromStartDateTimeInclusive: Instant? = null,
+        @Query("fromEndDateTimeINC") fromEndDateTimeInclusive: Instant? = null,
+        @Query("toStartDateTimeINC") toStartDateTimeInclusive: Instant? = null,
+        @Query("toEndDateTimeINC") toEndDateTimeInclusive: Instant? = null,
+        @Query("titleContainsIC") titleContainsIC: String? = null,
+        @Query("sortBy") sortBy: PrivateEventSortBy? = null,
+        @Query("sortDirection") sortDirection: SortDirection? = null,
+        @Query("limit") limit: Int,
+    ): List<PrivateEventResponseDto> // TODO - this will eventually be a string
 
     @POST("/users/{userId}/events")
     suspend fun createEvent(
@@ -43,6 +36,34 @@ interface EventsApi {
         @Path("userId") userId: String,
         @Body body: POSTEventRequestDTO,
     ): PrivateEventResponseDto
+
+    @GET("/users/{userId}/events/feed")
+    suspend fun getFeedForUser(
+        @Header("Authorization") token: String,
+        @Path("userId") userId: String,
+        @Query("lastEventId") lastEventId: String?,
+        @Query("limit") limit: Int,
+    ): MinimalEventListResponseDto
+
+    @GET("/events")
+    suspend fun getEventsByQueryParameters(
+        @Header("Authorization") token: String,
+        @Query("fromStartDateTimeINC") fromStartDateTimeInclusive: Instant? = null,
+        @Query("fromEndDateTimeINC") fromEndDateTimeInclusive: Instant? = null,
+        @Query("toStartDateTimeINC") toStartDateTimeInclusive: Instant? = null,
+        @Query("toEndDateTimeINC") toEndDateTimeInclusive: Instant? = null,
+        @Query("titleContainsIC") titleContainsIC: String? = null,
+        @Query("sortBy") sortBy: PublicEventSortBy? = null,
+        @Query("sortDirection") sortDirection: SortDirection? = null,
+        @Query("limit") limit: Int,
+    ): MinimalEventListResponseDto
+
+    @GET("/users/{userId}/events/{eventId}")
+    suspend fun getSingleEvent(
+        @Header("Authorization") token: String,
+        @Path("userId") userId: String,
+        @Path("eventId") eventId: String,
+    )
 
     @DELETE("/users/{userId}/events/{eventId}")
     suspend fun deleteEvent(

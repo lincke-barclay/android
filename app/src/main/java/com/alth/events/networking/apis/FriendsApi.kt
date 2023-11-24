@@ -1,6 +1,6 @@
 package com.alth.events.networking.apis
 
-import com.alth.events.models.network.users.ingress.PublicUserResponseDto
+import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header

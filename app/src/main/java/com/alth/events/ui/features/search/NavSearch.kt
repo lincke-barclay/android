@@ -9,9 +9,7 @@ import com.alth.events.ui.navigation.BottomAppBarRoute
 fun NavGraphBuilder.searchNavGraph(navController: NavController) {
     navigation(startDestination = "search/main", route = BottomAppBarRoute.Search.route) {
         composable("search/main") {
-            SearchMain(
-                navigateToPublicUser = { user -> navController.navigate("users/${user.id}") }
-            )
+            SearchMain()
         }
     }
 }

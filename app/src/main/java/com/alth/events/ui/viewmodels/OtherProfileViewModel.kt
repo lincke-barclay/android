@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alth.events.models.domain.CacheGetResult
-import com.alth.events.models.network.users.ingress.PublicUserResponseDto
-import com.alth.events.repositories.CachingFriendshipRepository
-import com.alth.events.repositories.CachingUserRepository
+import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
+import com.alth.events.data.caching.CachingFriendshipRepository
+import com.alth.events.data.caching.CachingUserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,7 +48,7 @@ class OtherProfileViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     fun sendFriendRequest() {
-        if(!sendFriendRequestJob.isActive){
+        if (!sendFriendRequestJob.isActive) {
             sendFriendRequestJob = viewModelScope.launch {
                 friendshipRepository.sendFriendRequest(id)
             }

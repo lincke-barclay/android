@@ -1,7 +1,7 @@
 package com.alth.events.ui.viewmodels.landing
 
 import androidx.lifecycle.ViewModel
-import com.alth.events.repositories.AuthenticationRepository
+import com.alth.events.data.repositories.AuthenticationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

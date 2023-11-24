@@ -2,6 +2,8 @@ package com.alth.events.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alth.events.logging.impl.AppLoggerFactory
+import com.alth.events.logging.impl.loggerFactory
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +42,7 @@ abstract class PagingViewModel<T>(
     }
 
     fun consumeItem(item: Int) {
+        loggerFactory.getLogger("TEST").info("Foo bar $item")
         if (!isLoadingNextData.value) {
             if (item >= page * pageSize - numBeforeNextFetch) {
                 fetchJob = viewModelScope.launch {

@@ -14,8 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.alth.events.models.network.users.ingress.PublicUserResponseDto
+import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
 import com.alth.events.ui.viewmodels.OtherProfileViewModel
 
 @Composable

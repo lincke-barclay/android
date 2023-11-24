@@ -17,7 +17,6 @@ import androidx.navigation.compose.rememberNavController
 import com.alth.events.ui.navigation.BottomAppBarRoute
 import com.alth.events.ui.navigation.NavMain
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomAppNavTheme() {
     val navHostController = rememberNavController()

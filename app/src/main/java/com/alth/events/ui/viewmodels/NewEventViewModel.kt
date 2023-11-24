@@ -4,9 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alth.events.exceptions.IllegalOperationException
-import com.alth.events.models.network.events.egress.POSTEventRequestDTO
-import com.alth.events.repositories.CachingEventRepository
-import com.alth.events.ui.util.toUiString
+import com.alth.events.networking.models.events.egress.POSTEventRequestDTO
+import com.alth.events.networking.sources.NetworkEventDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -70,7 +69,7 @@ data class NewEventUiState(
 
 @HiltViewModel
 class NewEventViewModel @Inject constructor(
-    private val cachingEventRepository: CachingEventRepository,
+    private val networkEventDataSource: NetworkEventDataSource,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NewEventUiState.initial())
     val uiState = _uiState.asStateFlow()
@@ -79,7 +78,7 @@ class NewEventViewModel @Inject constructor(
         if (uiState.value.canSubmit) {
             viewModelScope.launch {
                 _uiState.value = uiState.value.copy(loading = true)
-                cachingEventRepository.addNewEvent(uiState.value.toPOSTEventRequest())
+                networkEventDataSource.createEvent(uiState.value.toPOSTEventRequest())
                 _uiState.value = uiState.value.copy(loading = false)
                 onComplete()
             }
@@ -106,8 +105,8 @@ class NewEventViewModel @Inject constructor(
     fun changeStartDate(date: Instant) {
         val difference = date - uiState.value.enteredStartDate
         val newEndDate = uiState.value.enteredEndDate.plus(difference)
-        Log.d("START DATE", date.toUiString())
-        Log.d("End Date", uiState.value.enteredEndDate.toUiString())
+        Log.d("START DATE", date.toString())
+        Log.d("End Date", uiState.value.enteredEndDate.toString())
         _uiState.value = uiState.value.copy(
             enteredStartDate = date,
             enteredEndDate = newEndDate
@@ -115,8 +114,8 @@ class NewEventViewModel @Inject constructor(
     }
 
     fun changeEndDate(date: Instant) {
-        Log.d("END DATE", date.toUiString())
-        Log.d("START DATE", uiState.value.enteredStartDate.toUiString())
+        Log.d("END DATE", date.toString())
+        Log.d("START DATE", uiState.value.enteredStartDate.toString())
         if (date < uiState.value.enteredStartDate) {
             TODO("Handle when entered date is less than start date")
         }

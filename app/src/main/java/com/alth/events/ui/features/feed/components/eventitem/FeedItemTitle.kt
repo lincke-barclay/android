@@ -11,13 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.alth.events.models.network.users.ingress.PublicUserResponseDto
 import com.alth.events.ui.components.UserHorizontalBarItem
 
 @Composable
 fun FeedTitle(
     title: String,
-    organizer: PublicUserResponseDto,
+    organizerName: String,
+    organizerProfilePictureUrl: String,
     date: String,
 ) {
     Column(
@@ -25,7 +25,11 @@ fun FeedTitle(
             .fillMaxWidth()
             .background(color = MaterialTheme.colorScheme.background),
     ) {
-        UserHorizontalBarItem(organizer, trailingText = { "Organizer: $it" })
+        UserHorizontalBarItem(
+            organizerName,
+            organizerProfilePictureUrl,
+            trailingText = { "Organizer: $it" }
+        )
         Text(
             text = title,
             style = MaterialTheme.typography.titleLarge,

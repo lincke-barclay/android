@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import com.alth.events.authentication.sources.AuthenticationDataSource
-import com.alth.events.ui.features.authentication.views.AuthenticationStateEntryPoint
+import com.alth.events.ui.features.authentication.AuthenticationStateEntryPoint
 import com.alth.events.ui.viewmodels.AuthenticationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

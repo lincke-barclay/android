@@ -67,7 +67,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.0")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -106,4 +106,20 @@ dependencies {
 
     // Viewmodels
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // Paging
+    implementation("androidx.paging:paging-runtime-ktx:3.3.0-alpha02")
+    implementation("androidx.paging:paging-compose:3.3.0-alpha02")
+
+    // Room
+    val room_version = "2.6.0"
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-paging:$room_version")
+
+    // Pull refresh
+    implementation("eu.bambooapps:compose-material3-pullrefresh:1.0.0")
 }

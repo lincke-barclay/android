@@ -1,6 +1,6 @@
 package com.alth.events.authentication.sources
 
-import com.alth.events.models.firebase.FirebaseAuthenticationState
+import com.alth.events.authentication.models.FirebaseAuthenticationState
 import kotlinx.coroutines.flow.Flow
 
 interface AuthenticationDataSource {

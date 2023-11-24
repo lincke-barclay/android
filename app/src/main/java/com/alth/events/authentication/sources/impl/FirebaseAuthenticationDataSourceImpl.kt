@@ -7,7 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.alth.events.authentication.sources.AuthenticationDataSource
 import com.alth.events.exceptions.IllegalAuthenticationStateException
 import com.alth.events.logging.impl.loggerFactory
-import com.alth.events.models.firebase.FirebaseAuthenticationState
+import com.alth.events.authentication.models.FirebaseAuthenticationState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.userProfileChangeRequest

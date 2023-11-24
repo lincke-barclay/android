@@ -1,7 +1,5 @@
 package com.alth.events.networking.apis
 
-import com.alth.events.models.network.users.ingress.PrivateUserResponseDto
-import kotlinx.serialization.json.JsonObject
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path

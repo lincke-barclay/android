@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">events</string>
+    <string name="search">Search</string>
 </resources>

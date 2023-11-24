@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.alth.events.R
-import com.alth.events.models.network.users.ingress.PublicUserResponseDto
+import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
 
 data class ToggleableTag(
     val title: String,

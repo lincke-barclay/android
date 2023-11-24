@@ -8,7 +8,7 @@ import androidx.navigation.navigation
 import com.alth.events.ui.features.feed.FeedMain
 import com.alth.events.ui.features.feed.NewFeedMain
 import com.alth.events.ui.navigation.BottomAppBarRoute
-import com.alth.events.ui.viewmodels.FeedMainViewModel
+import com.alth.events.ui.features.feed.viewmodels.FeedMainViewModel
 import com.alth.events.ui.viewmodels.NewEventViewModel
 
 fun NavGraphBuilder.homeNavGraph(navController: NavController) {
