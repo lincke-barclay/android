@@ -1,8 +1,9 @@
-package com.alth.events.database.models.derived
+package com.alth.events.database.models.events.derived
 
+import androidx.room.ColumnInfo
 import kotlinx.datetime.Instant
 
-data class MyEvent(
+data class AnonymousEvent(
     val id: String,
     val startDateTime: Instant,
     val endDateTime: Instant,

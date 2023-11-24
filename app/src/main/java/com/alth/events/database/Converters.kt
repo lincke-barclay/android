@@ -2,6 +2,7 @@ package com.alth.events.database
 
 import androidx.room.TypeConverter
 import com.alth.events.database.models.UpdateType
+import com.alth.events.models.domain.events.PublicEventQuery
 import kotlinx.datetime.Instant
 
 class Converters {

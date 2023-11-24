@@ -3,7 +3,7 @@ package com.alth.events.data.caching.events
 import com.alth.events.authentication.sources.AuthenticationDataSource
 import com.alth.events.authentication.sources.withIDOrThrow
 import com.alth.events.database.DatabaseTransactionUseCase
-import com.alth.events.database.models.derived.MyEvent
+import com.alth.events.database.models.events.derived.AnonymousEvent
 import com.alth.events.database.sources.events.MyEventsLocalDataSource
 import com.alth.events.models.domain.events.PublicEventQuery
 import com.alth.events.networking.models.NetworkResult
@@ -17,13 +17,12 @@ class MyQueriedEventsCachingManager @Inject constructor(
     private val networkEventDataSource: NetworkEventDataSource,
     private val myEventsLocalDataSource: MyEventsLocalDataSource,
     private val transaction: DatabaseTransactionUseCase,
-    private val authenticationDataSource: AuthenticationDataSource,
 ) {
     suspend fun updateLocalSearchResultsForQuery(
         query: PublicEventQuery,
         limit: Int,
         invalidateCache: Boolean,
-        lastEventConsumed: MyEvent? = null, // For paging
+        lastEventConsumed: AnonymousEvent? = null, // For paging
     ): NetworkResult<List<PrivateEventResponseDto>> {
         // Find next query based on last event result
         val nextQuery = lastEventConsumed?.let {
@@ -60,8 +59,6 @@ class MyQueriedEventsCachingManager @Inject constructor(
             sortDirection = nextQuery.sortDirection,
             limit = limit,
         )
-
-        val myId = authenticationDataSource.withIDOrThrow { it }
 
         when (response) {
             is NetworkResult.Success -> {

@@ -21,7 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.alth.events.R
-import com.alth.events.database.models.derived.SearchEventResult
+import com.alth.events.database.models.events.derived.SearchEventResult
 import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
 import com.alth.events.ui.features.search.components.CustomTabRow
 import com.alth.events.ui.features.search.events.LazyListSearchEventsResult

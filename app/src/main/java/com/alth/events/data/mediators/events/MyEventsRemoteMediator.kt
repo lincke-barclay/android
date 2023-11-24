@@ -5,7 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.alth.events.data.caching.events.MyQueriedEventsCachingManager
-import com.alth.events.database.models.derived.MyEvent
+import com.alth.events.database.models.events.derived.AnonymousEvent
 import com.alth.events.logging.impl.loggerFactory
 import com.alth.events.models.domain.events.PublicEventQuery
 import com.alth.events.networking.models.NetworkResult
@@ -14,12 +14,12 @@ import com.alth.events.networking.models.NetworkResult
 class MyEventsRemoteMediator(
     private val myQueriedEventsCachingManager: MyQueriedEventsCachingManager,
     private val searchQuery: PublicEventQuery,
-) : RemoteMediator<Int, MyEvent>() {
+) : RemoteMediator<Int, AnonymousEvent>() {
     private val logger = loggerFactory.getLogger(this)
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, MyEvent>,
+        state: PagingState<Int, AnonymousEvent>,
     ): MediatorResult {
         logger.debug("Loading events for me")
         val lastLoaded = when (loadType) {

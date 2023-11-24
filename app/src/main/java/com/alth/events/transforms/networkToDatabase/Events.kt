@@ -1,14 +1,14 @@
 package com.alth.events.transforms.networkToDatabase
 
-import com.alth.events.database.models.Event
+import com.alth.events.database.models.events.EventEntity
+import com.alth.events.database.models.events.FeedEventEntity
+import com.alth.events.database.models.events.QueriedEventEntity
+import com.alth.events.models.domain.events.PublicEventQuery
 import com.alth.events.networking.models.events.ingress.PrivateEventResponseDto
 import com.alth.events.networking.models.events.ingress.PublicEventResponseDto
 
-fun PublicEventResponseDto.toDatabaseEvent(
-    fromSearchQuery: String? = null,
-    isFeed: Boolean = false,
-): Event {
-    return Event(
+fun PublicEventResponseDto.toEventEntity(): EventEntity {
+    return EventEntity(
         id = id,
         ownerId = ownerId,
         startDateTime = startDateTime,
@@ -16,17 +16,22 @@ fun PublicEventResponseDto.toDatabaseEvent(
         title = title,
         shortDescription = shortDescription,
         longDescription = longDescription,
-        fromSearchQuery = fromSearchQuery,
-        isFeed = isFeed,
     )
 }
 
-fun PrivateEventResponseDto.toDatabaseEvent(
-    myId: String,
-    fromSearchQuery: String? = null,
-    isFeed: Boolean = false,
-): Event {
-    return Event(
+fun PublicEventResponseDto.toFeedEventEntity(): FeedEventEntity {
+    return FeedEventEntity(eventId = id)
+}
+
+fun PublicEventResponseDto.toQueriedEvent(query: PublicEventQuery): QueriedEventEntity {
+    return QueriedEventEntity(
+        eventId = id,
+        serializedQuery = query.toUniqueId(),
+    )
+}
+
+fun PrivateEventResponseDto.toEventEntity(myId: String): EventEntity {
+    return EventEntity(
         id = id,
         ownerId = myId,
         startDateTime = startDateTime,
@@ -34,7 +39,5 @@ fun PrivateEventResponseDto.toDatabaseEvent(
         title = title,
         shortDescription = shortDescription,
         longDescription = longDescription,
-        fromSearchQuery = fromSearchQuery,
-        isFeed = isFeed,
     )
 }

@@ -3,7 +3,7 @@ package com.alth.events.ui.features.search.events.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
 import com.alth.events.data.repositories.paging.EventQueryPagerRepository
-import com.alth.events.database.models.derived.SearchEventResult
+import com.alth.events.database.models.events.derived.SearchEventResult
 import com.alth.events.models.domain.events.PublicEventQuery
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

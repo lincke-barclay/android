@@ -1,20 +1,20 @@
-package com.alth.events.database.models.derived
+package com.alth.events.database.models.events.derived
 
-import com.alth.events.database.models.Event
-import com.alth.events.database.models.PublicUser
+import androidx.room.ColumnInfo
+import com.alth.events.database.models.users.PublicUserEntity
+import com.alth.events.database.models.events.EventEntity
 import com.alth.events.models.domain.events.PublicEventQuery
 import kotlinx.datetime.Instant
 
 data class SearchEventResult(
     val id: String,
-    val ownerName: String,
+    @ColumnInfo(name = "name") val ownerName: String,
     val startDateTime: Instant,
     val endDateTime: Instant,
     val title: String,
     val shortDescription: String,
     val longDescription: String,
 ) {
-
     fun matches(query: PublicEventQuery): Boolean {
         val startDateTimeLessThan = query.toStartDateTimeInclusive?.let {
             startDateTime < it
@@ -40,15 +40,15 @@ data class SearchEventResult(
     }
 
     companion object {
-        fun from(event: Event, owner: PublicUser): SearchEventResult {
+        fun from(eventEntity: EventEntity, owner: PublicUserEntity): SearchEventResult {
             return SearchEventResult(
-                id = event.id,
+                id = eventEntity.id,
                 ownerName = owner.name,
-                startDateTime = event.startDateTime,
-                endDateTime = event.endDateTime,
-                title = event.title,
-                shortDescription = event.shortDescription,
-                longDescription = event.longDescription,
+                startDateTime = eventEntity.startDateTime,
+                endDateTime = eventEntity.endDateTime,
+                title = eventEntity.title,
+                shortDescription = eventEntity.shortDescription,
+                longDescription = eventEntity.longDescription,
             )
         }
     }

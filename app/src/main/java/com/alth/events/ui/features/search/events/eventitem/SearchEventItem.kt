@@ -5,7 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.alth.events.database.models.derived.SearchEventResult
+import com.alth.events.database.models.events.derived.SearchEventResult
 import com.alth.events.ui.util.toUiString
 import kotlinx.datetime.Clock
 

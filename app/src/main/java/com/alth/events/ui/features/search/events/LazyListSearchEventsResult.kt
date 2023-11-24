@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.alth.events.database.models.derived.SearchEventResult
+import com.alth.events.database.models.events.derived.SearchEventResult
 import com.alth.events.ui.features.search.events.eventitem.SearchEventItem
 import eu.bambooapps.material3.pullrefresh.pullRefresh
 import eu.bambooapps.material3.pullrefresh.rememberPullRefreshState

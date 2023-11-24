@@ -1,10 +1,12 @@
 package com.alth.events.database.sources.events
 
 import androidx.paging.PagingSource
+import androidx.room.Transaction
 import com.alth.events.database.dao.events.FeedDao
-import com.alth.events.database.models.derived.FeedEvent
+import com.alth.events.database.models.events.derived.FeedEvent
 import com.alth.events.database.sources.LastUpdateLocalDataSource
 import com.alth.events.networking.models.events.ingress.PublicEventResponseDto
+import com.alth.events.transforms.networkToDatabase.toFeedEventEntity
 import javax.inject.Inject
 
 class FeedLocalDataSource @Inject constructor(
@@ -12,12 +14,14 @@ class FeedLocalDataSource @Inject constructor(
     private val localEventDataSource: LocalEventDataSource,
     private val lastUpdateLocalDataSource: LastUpdateLocalDataSource,
 ) {
+    @Transaction
     suspend fun upsertFeed(elements: List<PublicEventResponseDto>) {
-        return lastUpdateLocalDataSource.doWithFeedUpdate {
-            localEventDataSource.upsertAll(
-                elements,
-                isFeed = true,
-            )
+        lastUpdateLocalDataSource.doWithFeedUpdate {
+            // upsert new events
+            localEventDataSource.upsertAll(elements)
+
+            // Update feed table notifying of changes
+            feedDao.upsertAll(elements.map { it.toFeedEventEntity() })
         }
     }
 

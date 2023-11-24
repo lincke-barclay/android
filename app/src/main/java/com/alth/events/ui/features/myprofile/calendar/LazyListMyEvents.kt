@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.alth.events.database.models.derived.MyEvent
+import com.alth.events.database.models.events.derived.AnonymousEvent
 import com.alth.events.ui.features.myprofile.calendar.eventitem.MyEventItem
 import eu.bambooapps.material3.pullrefresh.pullRefresh
 import eu.bambooapps.material3.pullrefresh.rememberPullRefreshState
@@ -28,7 +28,7 @@ import eu.bambooapps.material3.pullrefresh.rememberPullRefreshState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatefulLazyListMyEvents(
-    events: LazyPagingItems<MyEvent>,
+    events: LazyPagingItems<AnonymousEvent>,
     lazyListState: LazyListState = rememberLazyListState(),
     modifier: Modifier = Modifier,
 ) {

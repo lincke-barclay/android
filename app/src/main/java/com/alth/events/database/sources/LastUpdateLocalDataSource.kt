@@ -1,7 +1,7 @@
 package com.alth.events.database.sources
 
 import com.alth.events.database.dao.LastUpdateDao
-import com.alth.events.database.models.LastUpdate
+import com.alth.events.database.models.LastUpdateEntity
 import com.alth.events.database.models.UpdateType
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -12,7 +12,7 @@ class LastUpdateLocalDataSource @Inject constructor(
 ) {
     suspend fun <T> doWithFeedUpdate(block: suspend () -> T): T {
         val t = block()
-        val update = LastUpdate(
+        val update = LastUpdateEntity(
             updateType = UpdateType.FeedRefresh,
             lastUpdate = Clock.System.now()
         )

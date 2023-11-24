@@ -3,8 +3,8 @@ package com.alth.events.data.repositories
 import com.alth.events.authentication.sources.AuthenticationDataSource
 import com.alth.events.authentication.sources.withIDOrThrow
 import com.alth.events.database.DatabaseTransactionUseCase
-import com.alth.events.database.models.derived.SearchEventResult
-import com.alth.events.database.sources.UserLocalDataSource
+import com.alth.events.database.models.events.derived.SearchEventResult
+import com.alth.events.database.sources.users.UserLocalDataSource
 import com.alth.events.database.sources.events.SearchEventsLocalDataSource
 import com.alth.events.logging.impl.loggerFactory
 import com.alth.events.models.domain.events.PublicEventQuery
@@ -57,9 +57,9 @@ class QuickSearchEventRepository @Inject constructor(
         when (response) {
             is NetworkResult.Success -> {
                 transactionUseCase {
-                    searchEventsLocalDataSource.insertNewSearchEventsByQuery(
+                    searchEventsLocalDataSource.upsertNewSearchEventsByQuery(
                         events = response.t.publicEvents,
-                        query = query.toUniqueId(),
+                        query = query,
                     )
                     userLocalDataSource.upsertAll(response.t.publicUsers.values.toList())
                 }

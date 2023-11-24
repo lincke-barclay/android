@@ -1,6 +1,7 @@
 package com.alth.events.database.dao
 
 import com.alth.events.database.AppDatabase
+import com.alth.events.database.dao.users.PublicUserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,10 +17,4 @@ class DaoModule {
         return appDatabase.lastUpdatedDao()
     }
 
-    @Provides
-    fun providePublicUserDao(
-        appDatabase: AppDatabase,
-    ): PublicUserDao {
-        return appDatabase.publicUserDao()
-    }
 }

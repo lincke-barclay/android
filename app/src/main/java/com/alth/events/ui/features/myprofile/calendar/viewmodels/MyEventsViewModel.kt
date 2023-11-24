@@ -5,8 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.alth.events.data.repositories.paging.PagingMyEventsRepository
-import com.alth.events.database.models.derived.MyEvent
-import com.alth.events.logging.impl.loggerFactory
+import com.alth.events.database.models.events.derived.AnonymousEvent
 import com.alth.events.models.domain.events.PublicEventQuery
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -20,12 +19,12 @@ import javax.inject.Inject
 class MyEventsViewModel @Inject constructor(
     pagingMyEventsRepository: PagingMyEventsRepository,
 ) : ViewModel() {
-    private val _myEventsFlow = MutableStateFlow<Flow<PagingData<MyEvent>>>(emptyFlow())
-    val myEventsFlow = _myEventsFlow.asStateFlow()
+    private val _anonymousEventsFlow = MutableStateFlow<Flow<PagingData<AnonymousEvent>>>(emptyFlow())
+    val myEventsFlow = _anonymousEventsFlow.asStateFlow()
 
     init {
         viewModelScope.launch {
-            _myEventsFlow.value = pagingMyEventsRepository.myEventsFlow(
+            _anonymousEventsFlow.value = pagingMyEventsRepository.myEventsFlow(
                 query = PublicEventQuery.blank()
             ).cachedIn(viewModelScope)
         }

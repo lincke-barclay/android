@@ -5,7 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.alth.events.data.caching.events.FeedCachingManager
-import com.alth.events.database.models.derived.FeedEvent
+import com.alth.events.database.models.events.derived.FeedEvent
 import com.alth.events.logging.impl.loggerFactory
 import com.alth.events.networking.models.NetworkResult
 import javax.inject.Inject

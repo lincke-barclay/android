@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.alth.events.database.models.derived.FeedEvent
+import com.alth.events.database.models.events.derived.FeedEvent
 import com.alth.events.ui.features.feed.components.eventitem.FeedItem
 import eu.bambooapps.material3.pullrefresh.pullRefresh
 import eu.bambooapps.material3.pullrefresh.rememberPullRefreshState

@@ -1,4 +1,4 @@
-package com.alth.events.database.dao
+package com.alth.events.database.dao.users
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
@@ -6,16 +6,16 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.alth.events.database.models.PublicUser
-import com.alth.events.database.models.derived.PublicUserWithEvents
+import com.alth.events.database.models.users.PublicUserEntity
+import com.alth.events.database.models.events.derived.PublicUserWithEvents
 
 @Dao
 interface PublicUserDao {
     @Query("select * from public_user")
-    fun pagingSource(): PagingSource<Int, PublicUser>
+    fun pagingSource(): PagingSource<Int, PublicUserEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(users: List<PublicUser>)
+    suspend fun insertAll(users: List<PublicUserEntity>)
 
     @Query("delete from public_user")
     suspend fun clearAll()

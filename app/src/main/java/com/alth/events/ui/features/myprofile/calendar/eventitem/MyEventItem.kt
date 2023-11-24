@@ -5,13 +5,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.alth.events.database.models.derived.MyEvent
+import com.alth.events.database.models.events.derived.AnonymousEvent
 import com.alth.events.ui.util.toUiString
 import kotlinx.datetime.Clock
 
 @Composable
 fun MyEventItem(
-    event: MyEvent,
+    event: AnonymousEvent,
 ) {
     Column {
         MyEventTitle(
@@ -30,7 +30,7 @@ fun MyEventItem(
 fun FeedItemPreview() {
     MaterialTheme {
         MyEventItem(
-            event = MyEvent(
+            event = AnonymousEvent(
                 id = "abc123",
                 startDateTime = Clock.System.now(),
                 endDateTime = Clock.System.now(),

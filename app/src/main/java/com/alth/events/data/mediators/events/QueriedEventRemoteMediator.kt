@@ -5,7 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.alth.events.data.caching.events.QueriedEventsCachingManager
-import com.alth.events.database.models.derived.SearchEventResult
+import com.alth.events.database.models.events.derived.SearchEventResult
 import com.alth.events.logging.impl.loggerFactory
 import com.alth.events.models.domain.events.PublicEventQuery
 import com.alth.events.networking.models.NetworkResult

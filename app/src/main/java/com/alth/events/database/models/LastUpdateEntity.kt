@@ -11,7 +11,7 @@ enum class UpdateType {
 }
 
 @Entity(tableName = "last_update")
-data class LastUpdate(
+data class LastUpdateEntity(
     @PrimaryKey @ColumnInfo("update_type") val updateType: UpdateType,
     @ColumnInfo("last_updated") val lastUpdate: Instant,
 )

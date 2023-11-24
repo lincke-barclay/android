@@ -2,7 +2,7 @@ package com.alth.events.data.caching.events
 
 import com.alth.events.database.DatabaseTransactionUseCase
 import com.alth.events.database.sources.LastUpdateLocalDataSource
-import com.alth.events.database.sources.UserLocalDataSource
+import com.alth.events.database.sources.users.UserLocalDataSource
 import com.alth.events.database.sources.events.FeedLocalDataSource
 import com.alth.events.networking.models.NetworkResult
 import com.alth.events.networking.models.events.ingress.MinimalEventListResponseDto
