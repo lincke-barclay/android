@@ -1,6 +1,7 @@
 package com.alth.events.database.dao.events
 
 import com.alth.events.database.AppDatabase
+import com.alth.events.database.dao.users.QueriedUserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,5 +36,12 @@ class EventDaoModule {
         appDatabase: AppDatabase,
     ): SearchEventDao {
         return appDatabase.searchEventDao()
+    }
+
+    @Provides
+    fun provideQueriedUSerDao(
+        appDatabase: AppDatabase,
+    ): QueriedUserDao {
+        return appDatabase.queriedUserDao()
     }
 }

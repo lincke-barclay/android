@@ -14,13 +14,11 @@ import com.alth.events.R
 import com.alth.events.ui.features.feed.components.StatefulLazyListFeed
 import com.alth.events.ui.features.feed.viewmodels.FeedMainViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedMain(
     feedMainViewModel: FeedMainViewModel,
     navigateToNewEvent: () -> Unit,
 ) {
-    val lazyListState = rememberLazyListState()
     val feedEvents = feedMainViewModel.eventPagingFlow.collectAsLazyPagingItems()
 
     Scaffold(
@@ -33,7 +31,6 @@ fun FeedMain(
             }
         }) { padding ->
         StatefulLazyListFeed(
-            lazyListState = lazyListState,
             events = feedEvents,
             modifier = Modifier.padding(padding),
         )

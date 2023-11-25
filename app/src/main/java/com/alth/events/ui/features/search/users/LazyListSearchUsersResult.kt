@@ -1,4 +1,4 @@
-package com.alth.events.ui.features.search.events
+package com.alth.events.ui.features.search.users
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,41 +12,47 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.alth.events.database.models.events.derived.SearchEventResult
+import com.alth.events.database.models.users.PublicUserEntity
 import com.alth.events.ui.components.GenericLazyPager
-import com.alth.events.ui.features.search.events.eventitem.SearchEventItem
+import com.alth.events.ui.components.UserHorizontalBarItem
 
 @Composable
-fun LazyListSearchEventsResult(
+fun LazyListSearchUserResult(
     modifier: Modifier = Modifier,
-    events: LazyPagingItems<SearchEventResult>,
+    users: LazyPagingItems<PublicUserEntity>,
 ) {
-    GenericLazyPager(items = events, modifier = modifier) {
+    GenericLazyPager(items = users, modifier = modifier) {
         Column(Modifier.padding(bottom = 12.dp)) {
-            SearchEventItem(
-                event = it,
-            )
+            UserHorizontalBarItem(
+                name = it.name,
+                profilePictureUrl = it.profilePictureUrl,
+            ) {
+                "Result"
+            }
             Divider(thickness = 3.dp)
         }
     }
 }
 
 @Composable
-fun LimitedLazyListSearchEventsResult(
+fun LimitedLazyListSearchUserResult(
     modifier: Modifier = Modifier,
-    events: List<SearchEventResult>,
+    users: List<PublicUserEntity>,
     lazyListState: LazyListState = rememberLazyListState(),
 ) {
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         LazyColumn(
             state = lazyListState
         ) {
-            items(events.size) { eventId ->
-                val event = events[eventId]
+            items(users.size) { userId ->
+                val user = users[userId]
                 Column(Modifier.padding(bottom = 12.dp)) {
-                    SearchEventItem(
-                        event = event,
-                    )
+                    UserHorizontalBarItem(
+                        name = user.name,
+                        profilePictureUrl = user.profilePictureUrl,
+                    ) {
+                        "Result"
+                    }
                     Divider(thickness = 3.dp)
                 }
             }

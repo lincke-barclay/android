@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.alth.events.data.repositories.paging.PagingMyEventsRepository
+import com.alth.events.data.repositories.paging.events.PagingMyEventsRepository
 import com.alth.events.database.models.events.derived.AnonymousEvent
 import com.alth.events.models.domain.events.PublicEventQuery
 import dagger.hilt.android.lifecycle.HiltViewModel

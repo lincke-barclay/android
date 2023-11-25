@@ -1,4 +1,4 @@
-package com.alth.events.data.repositories.paging
+package com.alth.events.data.repositories.paging.events
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager

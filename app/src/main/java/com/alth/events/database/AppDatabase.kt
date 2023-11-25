@@ -10,11 +10,13 @@ import com.alth.events.database.dao.events.FeedDao
 import com.alth.events.database.dao.events.SearchEventDao
 import com.alth.events.database.dao.users.FriendshipDao
 import com.alth.events.database.dao.users.PublicUserDao
+import com.alth.events.database.dao.users.QueriedUserDao
 import com.alth.events.database.models.LastUpdateEntity
 import com.alth.events.database.models.events.EventEntity
 import com.alth.events.database.models.events.FeedEventEntity
 import com.alth.events.database.models.events.QueriedEventEntity
-import com.alth.events.database.models.users.FriendshipEntity
+import com.alth.events.database.models.friends.FriendshipEntity
+import com.alth.events.database.models.friends.QueriedUserEntity
 import com.alth.events.database.models.users.PublicUserEntity
 
 @Database(
@@ -25,6 +27,7 @@ import com.alth.events.database.models.users.PublicUserEntity
         FeedEventEntity::class,
         QueriedEventEntity::class,
         FriendshipEntity::class,
+        QueriedUserEntity::class,
     ],
     version = 1,
     exportSchema = false,
@@ -33,6 +36,7 @@ import com.alth.events.database.models.users.PublicUserEntity
 abstract class AppDatabase : RoomDatabase() {
     abstract fun publicUserDao(): PublicUserDao
     abstract fun friendshipDao(): FriendshipDao
+    abstract fun queriedUserDao(): QueriedUserDao
 
     /**
      * Events

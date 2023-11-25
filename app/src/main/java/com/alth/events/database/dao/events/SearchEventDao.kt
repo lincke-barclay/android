@@ -14,12 +14,12 @@ interface SearchEventDao {
         "select e.id, u.name, e.startDateTime, e.endDateTime, e.title, e.shortDescription, e.longDescription" +
                 " from event e, public_user u " +
                 "where e.id in " +
-                "(select q.eventId from query_results q where q.serializedQuery = :query) " +
+                "(select q.eventId from query_event_result q where q.serializedQuery = :query) " +
                 "and e.ownerId = u.id"
     )
     fun getSearchPagerForQuery(query: String): PagingSource<Int, SearchEventResult>
 
-    @Query("delete from query_results where serializedQuery = :query")
+    @Query("delete from query_event_result where serializedQuery = :query")
     suspend fun clearEventsBySearchQuery(query: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

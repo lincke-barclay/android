@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.alth.events.networking.models.users.ingress.PrivateUserResponseDto
 import com.alth.events.ui.features.myprofile.calendar.MyEventsMain
+import com.alth.events.ui.features.myprofile.friends.MyFriendsMain
 import com.alth.events.ui.features.myprofile.viewmodels.ProfileViewModel
 
 
@@ -71,7 +72,7 @@ fun ProfileMainStateless(
         }
         CustomTabRow(
             friendsContent = {
-                Text("Friends")
+                MyFriendsMain()
             },
             calendarContent = {
                 MyEventsMain()

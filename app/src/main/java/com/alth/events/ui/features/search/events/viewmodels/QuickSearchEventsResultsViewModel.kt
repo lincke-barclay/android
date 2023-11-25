@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class QuickSearchResultsViewModel @Inject constructor(
+class QuickSearchEventsResultsViewModel @Inject constructor(
     private val quickSearchEventRepository: QuickSearchEventRepository,
 ) : ViewModel() {
     private val logger = loggerFactory.getLogger(this)
@@ -19,6 +19,10 @@ class QuickSearchResultsViewModel @Inject constructor(
 
     // Prevent from multiple jobs popping up
     private var queryChangeJob: Job = Job().also { it.complete() }
+
+    init {
+        onQueryChange("")
+    }
 
     fun onQueryChange(newQuery: String) {
         val query = PublicEventQuery(

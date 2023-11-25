@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class FeedCachingManager @Inject constructor(
     private val networkEventDataSource: NetworkEventDataSource,
     private val feedLocalDataSource: FeedLocalDataSource,

@@ -23,4 +23,8 @@ interface PublicUserDao {
     @Transaction
     @Query("select * from public_user")
     suspend fun getPublicUsersWithTheirEvents(): List<PublicUserWithEvents>
+
+    // TODO - remove this and implement a query
+    @Query("select * from public_user")
+    suspend fun getUsers(): List<PublicUserEntity>
 }

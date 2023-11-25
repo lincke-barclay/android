@@ -1,11 +1,6 @@
 package com.alth.events.ui.features.search
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
@@ -22,34 +17,46 @@ import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.alth.events.R
 import com.alth.events.database.models.events.derived.SearchEventResult
-import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
+import com.alth.events.database.models.users.PublicUserEntity
 import com.alth.events.ui.features.search.components.CustomTabRow
 import com.alth.events.ui.features.search.events.LazyListSearchEventsResult
+import com.alth.events.ui.features.search.events.LimitedLazyListSearchEventsResult
 import com.alth.events.ui.features.search.events.viewmodels.PagingSearchEventsAfterQuerySubmitViewModel
-import com.alth.events.ui.features.search.events.viewmodels.QuickSearchResultsViewModel
+import com.alth.events.ui.features.search.events.viewmodels.QuickSearchEventsResultsViewModel
+import com.alth.events.ui.features.search.users.LazyListSearchUserResult
+import com.alth.events.ui.features.search.users.LimitedLazyListSearchUserResult
+import com.alth.events.ui.features.search.users.viewmodels.PagingSearchUsersAfterQuerySubmitViewModel
+import com.alth.events.ui.features.search.users.viewmodels.QuickSearchUserResultsViewModel
 import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchMain(
     pagingSearchEventsAfterQuerySubmitViewModel: PagingSearchEventsAfterQuerySubmitViewModel = hiltViewModel(),
-    quickSearchResultsViewModel: QuickSearchResultsViewModel = hiltViewModel(),
+    quickSearchEventsResultsViewModel: QuickSearchEventsResultsViewModel = hiltViewModel(),
+    quickSearchUserResultsViewModel: QuickSearchUserResultsViewModel = hiltViewModel(),
+    pagingSearchUsersAfterQuerySubmitViewModel: PagingSearchUsersAfterQuerySubmitViewModel = hiltViewModel(),
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(true) }
 
-    val searchResultsFromQuerySubmit by pagingSearchEventsAfterQuerySubmitViewModel.searchEventsFlow.collectAsState()
-    val quickSearchResults by quickSearchResultsViewModel.results.collectAsState()
+    val eventSearchResultsFromQuerySubmit by pagingSearchEventsAfterQuerySubmitViewModel.searchEventsFlow.collectAsState()
+    val eventQuickSearchResults by quickSearchEventsResultsViewModel.results.collectAsState()
+
+    val userSearchResultsFromQuerySubmit by pagingSearchUsersAfterQuerySubmitViewModel.searchUsersFlow.collectAsState()
+    val userQuickSearchResults by quickSearchUserResultsViewModel.results.collectAsState()
 
     Column {
         SearchBar(
             query = searchQuery,
             onQueryChange = {
-                quickSearchResultsViewModel.onQueryChange(it)
+                quickSearchEventsResultsViewModel.onQueryChange(it)
+                quickSearchUserResultsViewModel.onQueryChange(it)
                 searchQuery = it
             },
             onSearch = {
                 pagingSearchEventsAfterQuerySubmitViewModel.onQuerySubmit(it)
+                pagingSearchUsersAfterQuerySubmitViewModel.onQuerySubmit(it)
                 isSearchActive = false
             },
             active = isSearchActive,
@@ -60,51 +67,58 @@ fun SearchMain(
                     contentDescription = "Search Icon",
                 )
             },
-            placeholder = { Text(text = "Search for events") }
+            placeholder = { Text(text = "Search") }
         ) {
             CustomTabRow(
                 eventContent = {
-                    InsideEventSearchActive(
-                        quickSearchResults = quickSearchResults,
-                    )
+                    LimitedEventSearchResultsView(events = eventQuickSearchResults)
                 },
                 friendsContent = {
-                    Text("Friends")
+                    LimitedUserSearchResultsView(users = userQuickSearchResults)
                 },
             )
         }
         CustomTabRow(
             eventContent = {
-                SearchResultsView(
-                    eventsFlow = searchResultsFromQuerySubmit,
+                EventSearchResultsView(
+                    eventsFlow = eventSearchResultsFromQuerySubmit,
                 )
             },
             friendsContent = {
-                Text("Friends")
+                UserSearchResultsView(userFlow = userSearchResultsFromQuerySubmit)
             },
         )
     }
 }
 
 @Composable
-fun InsideEventSearchActive(
-    quickSearchResults: List<SearchEventResult>
+fun LimitedEventSearchResultsView(
+    events: List<SearchEventResult>
 ) {
-    Column {
-        quickSearchResults.forEach {
-            Row {
-                Text(it.title)
-                Text(it.ownerName)
-            }
-        }
-    }
+    LimitedLazyListSearchEventsResult(events = events)
 }
 
 @Composable
-fun SearchResultsView(
+fun EventSearchResultsView(
     eventsFlow: Flow<PagingData<SearchEventResult>>
 ) {
     LazyListSearchEventsResult(
         events = eventsFlow.collectAsLazyPagingItems(),
+    )
+}
+
+@Composable
+fun LimitedUserSearchResultsView(
+    users: List<PublicUserEntity>
+) {
+    LimitedLazyListSearchUserResult(users = users)
+}
+
+@Composable
+fun UserSearchResultsView(
+    userFlow: Flow<PagingData<PublicUserEntity>>
+) {
+    LazyListSearchUserResult(
+        users = userFlow.collectAsLazyPagingItems(),
     )
 }

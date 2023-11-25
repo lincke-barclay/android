@@ -28,6 +28,7 @@ class QuickSearchEventRepository @Inject constructor(
     private val _results: MutableStateFlow<List<SearchEventResult>> = MutableStateFlow(emptyList())
     val results = _results.asStateFlow()
 
+    // TODO - is this faster as a sql query?
     suspend fun onQueryChange(query: PublicEventQuery) {
         logger.debug("New query: $query")
         _results.value = authenticationDataSource.withIDOrThrow { myId ->

@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 
 @Entity(
-    tableName = "query_results",
+    tableName = "query_event_result",
     foreignKeys = [ForeignKey(
         entity = EventEntity::class,
         parentColumns = arrayOf("id"),

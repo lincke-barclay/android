@@ -1,4 +1,4 @@
-package com.alth.events.ui.features.feed
+package com.alth.events.ui.features.newevent
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -8,53 +8,35 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import com.alth.events.ui.components.IndeterminateCircularIndicator
-import com.alth.events.ui.viewmodels.NewEventViewModel
+import com.alth.events.ui.features.newevent.viewmodels.NewEventViewModel
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun NewFeedMain(
     newEventViewModel: NewEventViewModel,
     navigateBack: () -> Unit,
 ) {
+    val a = Clock.System.now()
     val uiState by newEventViewModel.uiState.collectAsState()
 
-    /**
-     * TODO - Everything about this is stupid and awful
-     */
-    val timeZone = TimeZone.currentSystemDefault()
 
-    fun onStartDayChange(day: LocalDate) {
-        val newLocalDateTime = LocalDateTime(day, uiState.startTime)
-        val newInstant = newLocalDateTime.toInstant(timeZone)
-        newEventViewModel.changeStartDate(newInstant)
-    }
+/**
 
-    fun onEndDayChange(day: LocalDate) {
-        val newLocalDateTime = LocalDateTime(day, uiState.endTime)
-        val newInstant = newLocalDateTime.toInstant(timeZone)
-        newEventViewModel.changeEndDate(newInstant)
-    }
-
-    fun onStartTimeChange(time: LocalTime) {
-        val newLocalDateTime = LocalDateTime(uiState.startDate, time)
-        val newInstant = newLocalDateTime.toInstant(timeZone)
-        newEventViewModel.changeStartDate(newInstant)
-    }
-
-    fun onEndTimeChange(time: LocalTime) {
-        val newLocalDateTime = LocalDateTime(uiState.endDate, time)
-        val newInstant = newLocalDateTime.toInstant(timeZone)
-        newEventViewModel.changeEndDate(newInstant)
-    }
 
     NewEventMainStateless(
         enteredTitle = uiState.enteredTitle,
@@ -78,79 +60,61 @@ fun NewFeedMain(
             navigateBack()
         }
     }
+    **/
 }
 
+/**
 @OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NewEventTopAppBar(
+    onExit: () -> Unit,
+    onSave: () -> Unit,
+) {
+    TopAppBar(
+        title = { Text("Hello World") }
+    )
+}
+
+@Composable
+fun NewEventTitleSelection(
+    enteredTitle: String,
+    onTitleChange: (String) -> Unit,
+) {
+    Text(text = "Title:")
+    TextField(value = enteredTitle, onValueChange = onTitleChange)
+}
+
+
 @Composable
 fun NewEventMainStateless(
     enteredTitle: String,
     enteredShortDescription: String,
     enteredLongDescription: String,
-    selectedStartDay: LocalDate,
-    selectedStartTime: LocalTime,
-    selectedEndDay: LocalDate,
-    selectedEndTime: LocalTime,
+
     loading: Boolean,
     onChangeEnteredTitle: (String) -> Unit,
     onChangeEnteredShortDescription: (String) -> Unit,
     onChangeEnteredLongDescription: (String) -> Unit,
-    onChangeSelectedStartDay: (LocalDate) -> Unit,
-    onChangeSelectedStartTime: (LocalTime) -> Unit,
-    onChangeSelectedEndDay: (LocalDate) -> Unit,
-    onChangeSelectedEndTime: (LocalTime) -> Unit,
+
     canSubmit: Boolean,
     onSubmit: () -> Unit,
 ) {
 
-    val context = LocalContext.current
-
-    val startDatePicker = DatePickerDialog(
-        context, { _, year, month, day ->
-            onChangeSelectedStartDay(LocalDate(year = year, monthNumber = month, dayOfMonth = day))
-        }, selectedStartDay.year, selectedStartDay.monthNumber, selectedStartDay.dayOfMonth
-    )
-
-    val endDatePicker = DatePickerDialog(
-        context, { _, year, month, day ->
-            onChangeSelectedEndDay(LocalDate(year = year, monthNumber = month, dayOfMonth = day))
-        }, selectedEndDay.year, selectedEndDay.monthNumber, selectedEndDay.dayOfMonth
-    )
-
-    val startTimePicker = TimePickerDialog(
-        context, { _, hourOfDay, minute ->
-            onChangeSelectedStartTime(LocalTime(hour = hourOfDay, minute = minute))
-        }, selectedStartTime.hour, selectedStartTime.minute, true
-    )
-
-    val endTimePicker = TimePickerDialog(
-        context, { _, hourOfDay, minute ->
-            onChangeSelectedEndTime(LocalTime(hour = hourOfDay, minute = minute))
-        }, selectedEndTime.hour, selectedEndTime.minute, true
-    )
 
     if (loading) {
         IndeterminateCircularIndicator()
     }
     Column {
         Text("New Feed")
-        Text(text = "Title:")
-        TextField(value = enteredTitle, onValueChange = onChangeEnteredTitle)
+
         Text(text = "ShortDescription:")
         TextField(value = enteredShortDescription, onValueChange = onChangeEnteredShortDescription)
         Text(text = "LongDescription:")
         TextField(value = enteredLongDescription, onValueChange = onChangeEnteredLongDescription)
         Row {
             Text("Start: ")
-            Button(onClick = { startDatePicker.show() }) {
-                Row {
-                    Text("$selectedStartDay")
-                }
-            }
-            Button(onClick = { startTimePicker.show() }) {
-                Row {
-                    Text("$selectedStartTime")
-                }
-            }
+
+
         }
 
         Row {
@@ -172,3 +136,28 @@ fun NewEventMainStateless(
         }
     }
 }
+
+@Preview
+@Composable
+fun CreateNewEventPreview() {
+    NewEventMainStateless(
+        enteredTitle = "Foo bar",
+        enteredShortDescription = "This is a foo bar",
+        enteredLongDescription = "This is a long description",
+        selectedStartDay = Clock.System.now().toLocalDateTime(TimeZone.UTC).date,
+        selectedStartTime = Clock.System.now().toLocalDateTime(TimeZone.UTC).time,
+        selectedEndDay = Clock.System.now().toLocalDateTime(TimeZone.UTC).date,
+        selectedEndTime = Clock.System.now().toLocalDateTime(TimeZone.UTC).time,
+        loading = false,
+        onChangeEnteredTitle = {},
+        onChangeEnteredShortDescription = {},
+        onChangeEnteredLongDescription = {},
+        onChangeSelectedStartDay = {},
+        onChangeSelectedStartTime = {},
+        onChangeSelectedEndDay = {},
+        onChangeSelectedEndTime = {},
+        canSubmit = false,
+        onSubmit = {}
+    )
+}
+        **/

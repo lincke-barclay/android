@@ -1,4 +1,4 @@
-package com.alth.events.ui.viewmodels
+package com.alth.events.ui.features.newevent.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
