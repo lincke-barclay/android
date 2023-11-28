@@ -85,7 +85,7 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
                         )
                         cont.resume(SignInResult.Success)
                     } else {
-                        logger.error(task.exception?.stackTraceToString() ?: "Error ")
+                        logger.warn("Failed to sign in", task.exception)
                         when (task.exception) {
                             is FirebaseAuthInvalidUserException -> {
                                 cont.resume(SignInResult.ThatUserDoesntExist)
@@ -118,7 +118,7 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
                         )
                         cont.resume(SignUpResult.Success)
                     } else {
-                        logger.error(task.exception?.stackTraceToString() ?: "Error ")
+                        logger.warn("Failed to create account", task.exception)
                         when (task.exception) {
                             is FirebaseAuthWeakPasswordException -> {
                                 cont.resume(SignUpResult.WeakPasswordException)
@@ -168,8 +168,7 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
                     refreshLocalCopyOfFirebaseUser()
                     cont.resume(ReloadResult.Success)
                 } else {
-                    loggerFactory.getLogger(this)
-                        .debug("Couldn't reload firebase user, reason: ${task.exception}")
+                    logger.warn("Failed to reload", task.exception)
                     when (task.exception) {
                         is FirebaseAuthInvalidUserException -> {
                             cont.resume(ReloadResult.InvalidAccount)
@@ -225,7 +224,10 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
                                 if (task.isSuccessful) {
                                     cont.resume(ChangeNameResult.Success)
                                 } else {
-                                    logger.error(task.exception?.stackTraceToString() ?: "Error ")
+                                    logger.warn(
+                                        "Failed to change name of current user",
+                                        task.exception
+                                    )
                                     when (task.exception) {
                                         is FirebaseAuthInvalidUserException -> {
                                             cont.resume(ChangeNameResult.InvalidUserException)

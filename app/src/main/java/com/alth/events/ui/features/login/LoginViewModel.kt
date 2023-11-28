@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alth.events.data.repositories.AuthenticationRepository
 import com.alth.events.models.domain.authentication.results.SignInResult
+import com.alth.events.util.isEmailValid
+import com.alth.events.util.isPasswordValid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -29,8 +31,8 @@ class LoginViewModel @Inject constructor(
 
     private var signInJob: Job = Job().also { it.complete() }
 
-    private val emailIsValid get() = email.length > 4
-    private val passwordIsValid get() = password.length > 4
+    private val emailIsValid get() = isEmailValid(email)
+    private val passwordIsValid get() = isPasswordValid(password)
     val submitAvailable get() = emailIsValid && passwordIsValid
 
     fun signIn() {

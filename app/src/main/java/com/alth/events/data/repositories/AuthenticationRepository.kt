@@ -26,7 +26,7 @@ class AuthenticationRepository @Inject constructor(
         authenticationDataSource.signUp(email, password)
 
     fun signOut() = authenticationDataSource.signOut()
-    suspend fun reload() = authenticationDataSource.reload()
+
     suspend fun sendVerificationEmailForCurrentlySignedInUser() =
         authenticationDataSource.sendVerificationEmailForCurrentlySignedInUser()
 

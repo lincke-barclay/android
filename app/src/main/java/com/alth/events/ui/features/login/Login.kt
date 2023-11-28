@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -79,9 +80,9 @@ fun Login(
         }
     ) {
         LoginStateless(
-            loginViewModel::signIn,
-            loginViewModel.email,
-            loginViewModel.password,
+            submit = loginViewModel::signIn,
+            email = loginViewModel.email,
+            password = loginViewModel.password,
             loading = loginViewModel.loading,
             modifier = Modifier.padding(it),
             submitAvailable = loginViewModel.submitAvailable,
@@ -93,6 +94,7 @@ fun Login(
 
 @Composable
 fun LoginStateless(
+    modifier: Modifier = Modifier,
     submit: () -> Unit,
     email: String,
     password: String,
@@ -100,12 +102,10 @@ fun LoginStateless(
     onPasswordChange: (String) -> Unit,
     loading: Boolean,
     submitAvailable: Boolean,
-    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .background(Color.Transparent),
+            .imePadding(),
         contentAlignment = Alignment.Center,
     ) {
         if (loading) {
@@ -113,8 +113,7 @@ fun LoginStateless(
         }
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.Transparent),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Top,
         ) {
             Text(
@@ -147,6 +146,7 @@ fun LoginStateless(
                             .padding(horizontal = 10.dp)
                             .fillMaxWidth(),
                         maxLines = 1,
+                        singleLine = true,
                     )
                 }
             }
@@ -182,6 +182,7 @@ fun LoginStateless(
                         ),
                         visualTransformation = PasswordVisualTransformation(),
                         maxLines = 1,
+                        singleLine = true,
                     )
                 }
             }
