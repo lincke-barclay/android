@@ -2,8 +2,8 @@ package com.alth.events.data.caching.events
 
 import com.alth.events.database.DatabaseTransactionUseCase
 import com.alth.events.database.models.events.derived.SearchEventResult
-import com.alth.events.database.sources.users.UserLocalDataSource
 import com.alth.events.database.sources.events.SearchEventsLocalDataSource
+import com.alth.events.database.sources.users.UserLocalDataSource
 import com.alth.events.models.domain.events.PublicEventQuery
 import com.alth.events.networking.models.NetworkResult
 import com.alth.events.networking.models.PublicEventSortBy

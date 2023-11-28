@@ -4,8 +4,8 @@ import com.alth.events.authentication.sources.AuthenticationDataSource
 import com.alth.events.authentication.sources.withIDOrThrow
 import com.alth.events.database.DatabaseTransactionUseCase
 import com.alth.events.database.models.events.derived.SearchEventResult
-import com.alth.events.database.sources.users.UserLocalDataSource
 import com.alth.events.database.sources.events.SearchEventsLocalDataSource
+import com.alth.events.database.sources.users.UserLocalDataSource
 import com.alth.events.logging.impl.loggerFactory
 import com.alth.events.models.domain.events.PublicEventQuery
 import com.alth.events.networking.models.NetworkResult

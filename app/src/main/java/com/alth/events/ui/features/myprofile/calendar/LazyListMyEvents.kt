@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.alth.events.database.models.events.derived.AnonymousEvent
+import com.alth.events.ui.components.IndeterminateCircularIndicator
 import com.alth.events.ui.features.myprofile.calendar.eventitem.MyEventItem
 import eu.bambooapps.material3.pullrefresh.pullRefresh
 import eu.bambooapps.material3.pullrefresh.rememberPullRefreshState
@@ -51,7 +51,7 @@ fun StatefulLazyListMyEvents(
 
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         AnimatedVisibility(visible = events.loadState.refresh is LoadState.Loading) {
-            CircularProgressIndicator()
+            IndeterminateCircularIndicator()
         }
         LazyColumn(
             modifier = Modifier
@@ -72,7 +72,7 @@ fun StatefulLazyListMyEvents(
             }
             item {
                 if (events.loadState.append is LoadState.Loading) {
-                    CircularProgressIndicator()
+                    IndeterminateCircularIndicator()
                 }
             }
         }

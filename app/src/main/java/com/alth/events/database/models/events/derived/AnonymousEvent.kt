@@ -1,6 +1,5 @@
 package com.alth.events.database.models.events.derived
 
-import androidx.room.ColumnInfo
 import kotlinx.datetime.Instant
 
 data class AnonymousEvent(

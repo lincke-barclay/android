@@ -14,7 +14,7 @@ import com.alth.events.ui.features.otherprofile.OtherProfile
 import com.alth.events.ui.features.search.searchNavGraph
 
 @Composable
-fun NavMain(
+fun AuthenticatedNavMain(
     navHostController: NavHostController,
     modifier: Modifier,
 ) {

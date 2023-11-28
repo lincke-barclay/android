@@ -1,7 +1,5 @@
 package com.alth.events.data.caching.events
 
-import com.alth.events.authentication.sources.AuthenticationDataSource
-import com.alth.events.authentication.sources.withIDOrThrow
 import com.alth.events.database.DatabaseTransactionUseCase
 import com.alth.events.database.models.events.derived.AnonymousEvent
 import com.alth.events.database.sources.events.MyEventsLocalDataSource

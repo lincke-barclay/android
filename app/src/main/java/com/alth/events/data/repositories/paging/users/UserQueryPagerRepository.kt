@@ -20,7 +20,7 @@ class UserQueryPagerRepository @Inject constructor(
     private val pageSize = 20 // TODO - configure this in application properties
     private val logger = loggerFactory.getLogger(this)
 
-    fun pager(query: String): Flow<PagingData<PublicUserEntity>> {
+    fun pager(query: String): Pager<Int, PublicUserEntity> {
         logger.debug("Creating new search event mediator for query: $query")
         val mediator = QueriedUserRemoteMediator(
             queriedUsersCachingManager,
@@ -32,11 +32,10 @@ class UserQueryPagerRepository @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = pageSize,
-                prefetchDistance = 2,
             ),
             remoteMediator = mediator,
         ) {
             queriedUserLocalDataSource.getQueryUsersForQuery(query)
-        }.flow
+        }
     }
 }

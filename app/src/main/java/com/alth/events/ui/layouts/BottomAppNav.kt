@@ -1,7 +1,6 @@
 package com.alth.events.ui.layouts
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -12,14 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import com.alth.events.ui.navigation.AuthenticatedNavMain
 import com.alth.events.ui.navigation.BottomAppBarRoute
-import com.alth.events.ui.navigation.NavMain
 
 @Composable
-fun BottomAppNavTheme() {
-    val navHostController = rememberNavController()
+fun BottomAppNavTheme(
+    navHostController: NavHostController,
+) {
     Scaffold(
         bottomBar = {
             NavigationBar {
@@ -87,7 +87,7 @@ fun BottomAppNavTheme() {
             }
         }
     ) { innerPadding ->
-        NavMain(
+        AuthenticatedNavMain(
             navHostController = navHostController,
             modifier = Modifier.padding(innerPadding),
         )

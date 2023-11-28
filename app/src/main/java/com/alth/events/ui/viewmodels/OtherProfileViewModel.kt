@@ -3,10 +3,10 @@ package com.alth.events.ui.viewmodels
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alth.events.models.domain.CacheGetResult
-import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
 import com.alth.events.data.caching.CachingFriendshipRepository
 import com.alth.events.data.caching.CachingUserRepository
+import com.alth.events.models.domain.CacheGetResult
+import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

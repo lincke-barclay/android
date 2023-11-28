@@ -2,14 +2,13 @@ package com.alth.events.data.caching.events
 
 import com.alth.events.database.DatabaseTransactionUseCase
 import com.alth.events.database.sources.LastUpdateLocalDataSource
-import com.alth.events.database.sources.users.UserLocalDataSource
 import com.alth.events.database.sources.events.FeedLocalDataSource
+import com.alth.events.database.sources.users.UserLocalDataSource
 import com.alth.events.networking.models.NetworkResult
 import com.alth.events.networking.models.events.ingress.MinimalEventListResponseDto
 import com.alth.events.networking.sources.NetworkEventDataSource
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class FeedCachingManager @Inject constructor(
     private val networkEventDataSource: NetworkEventDataSource,

@@ -11,20 +11,23 @@ sealed interface FirebaseAuthenticationState {
         val user: FirebaseUser
     ) : FirebaseAuthenticationState
 
-    fun toDomain() = run {
-        when (this) {
+    fun toDomain(): AuthenticationState {
+        val logger = loggerFactory.getLogger(tag = "FirebaseToDomainAccountState")
+        return when (this) {
             is SignedIn -> {
-                loggerFactory.getLogger(this).debug("Signed in user state is $user")
+                logger.debug("Signed in user state is $user")
                 if (!user.isEmailVerified) {
-                    loggerFactory.getLogger(this).debug("No email set - user is not initialized")
+                    logger.debug("No email is set - user is not initialized")
                     AuthenticationState.UserUnverified(null)
                 } else {
                     if (user.displayName == null || user.displayName!!.isEmpty()) {
-                        loggerFactory.getLogger(this).debug("No name set - user is not initialized")
-                        AuthenticationState.UserUninitialized(null)
+                        logger.debug("No name is set - user is not initialized")
+                        AuthenticationState.UsernameNotSet
                     } else {
-                        loggerFactory.getLogger(this)
-                            .debug("User is ok with name ${user.displayName}")
+                        logger.debug(
+                            "User is ok with name ${user.displayName} " +
+                                    "and photo url: ${user.photoUrl}",
+                        )
                         AuthenticationState.UserOk(user.displayName!!)
                     }
                 }

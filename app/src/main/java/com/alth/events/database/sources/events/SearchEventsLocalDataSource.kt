@@ -6,7 +6,6 @@ import com.alth.events.database.dao.events.SearchEventDao
 import com.alth.events.database.models.events.derived.SearchEventResult
 import com.alth.events.models.domain.events.PublicEventQuery
 import com.alth.events.networking.models.events.ingress.PublicEventResponseDto
-import com.alth.events.transforms.networkToDatabase.toEventEntity
 import com.alth.events.transforms.networkToDatabase.toQueriedEvent
 import javax.inject.Inject
 
@@ -15,7 +14,10 @@ class SearchEventsLocalDataSource @Inject constructor(
     private val localEventDataSource: LocalEventDataSource,
 ) {
     @Transaction
-    suspend fun upsertNewSearchEventsByQuery(events: List<PublicEventResponseDto>, query: PublicEventQuery) {
+    suspend fun upsertNewSearchEventsByQuery(
+        events: List<PublicEventResponseDto>,
+        query: PublicEventQuery
+    ) {
         localEventDataSource.upsertAll(events)
         searchEventDao.upsertAll(events.map { it.toQueriedEvent(query) })
     }

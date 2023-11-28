@@ -28,17 +28,18 @@ class QueriedUserRemoteMediator(
             LoadType.REFRESH -> 0
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
             LoadType.APPEND -> {
-                queriedUserLocalDataSource.countAllByQuery(searchQuery)
+                queriedUserLocalDataSource.countAllByQuery(searchQuery) / state.config.pageSize
             }
         }
 
         return when (val response = queriedUsersCachingManager.updateLocalSearchResultsForQuery(
             query = searchQuery,
-            invalidateCache = loadType == LoadType.REFRESH,
+            invalidateCacheForQuery = loadType == LoadType.REFRESH,
             page = page,
             pageSize = state.config.pageSize,
         )) {
             is NetworkResult.Success -> {
+                logger.debug("Recieved these users on query: $searchQuery: ${response.t}")
                 val endOfPagination = response.t.size < state.config.pageSize
                 if (endOfPagination) {
                     logger.debug("End of pagination reached for queried user")

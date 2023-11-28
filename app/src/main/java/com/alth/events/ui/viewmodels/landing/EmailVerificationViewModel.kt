@@ -10,11 +10,11 @@ class EmailVerificationViewModel @Inject constructor(
     private val authenticationRepository: AuthenticationRepository,
 ) : ViewModel() {
     fun onClickSendVerificationEmail() {
-        authenticationRepository.sendVerificationEmailForCurrentlySignedInUser()
+        //authenticationRepository.sendVerificationEmailForCurrentlySignedInUser()
     }
 
     fun reload() {
-        authenticationRepository.reload()
+        //authenticationRepository.reload()
     }
 
     fun signOut() {

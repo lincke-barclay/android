@@ -6,8 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.alth.events.database.models.users.PublicUserEntity
 import com.alth.events.database.models.events.derived.PublicUserWithEvents
+import com.alth.events.database.models.users.PublicUserEntity
 
 @Dao
 interface PublicUserDao {

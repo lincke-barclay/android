@@ -3,9 +3,8 @@ package com.alth.events.database.dao.users
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.alth.events.database.models.friends.QueriedUserEntity
+import com.alth.events.database.models.users.QueriedUserEntity
 import com.alth.events.database.models.users.PublicUserEntity
 
 @Dao
@@ -23,9 +22,12 @@ interface QueriedUserDao {
     @Query("delete from query_user_result where serializedQuery = :query")
     suspend fun clearUsersByQuery(query: String)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun upsertAll(elements: List<QueriedUserEntity>)
 
     @Query("select count(*) from query_user_result where serializedQuery = :query")
     suspend fun countAllByQuery(query: String): Int
+
+    @Query("select * from query_user_result")
+    suspend fun getAll(): List<QueriedUserEntity>
 }

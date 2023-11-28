@@ -3,16 +3,20 @@ package com.alth.events
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import com.alth.events.authentication.sources.AuthenticationDataSource
-import com.alth.events.ui.features.authentication.AuthenticationStateEntryPoint
-import com.alth.events.ui.viewmodels.AuthenticationViewModel
+import com.alth.events.ui.features.authentication.AuthenticationGuard
+import com.alth.events.ui.theme.EventsTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    /**
+     * Add authentication data source to observers
+     *
+     */
     @Inject
     lateinit var authenticationDataSource: AuthenticationDataSource
 
@@ -24,8 +28,9 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val authVM: AuthenticationViewModel by viewModels()
-            AuthenticationStateEntryPoint(authVM)
+            EventsTheme {
+                AuthenticationGuard()
+            }
         }
     }
 }

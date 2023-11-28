@@ -33,15 +33,6 @@ interface FriendsApi {
         @Query("pageSize") pageSize: Int,
     ): List<PublicUserResponseDto>
 
-    @GET("/users/{userId}/friends/suggested")
-    suspend fun getSuggestedFriends(
-        @Header("Authorization") token: String,
-        @Path("userId") userId: String,
-        @Query("page") page: Int,
-        @Query("pageSize") pageSize: Int,
-        @Query("queryStr") queryStr: String,
-    ): List<PublicUserResponseDto>
-
     @POST("/users/{requesterId}/friends/{recipientId}")
     suspend fun postFriendship(
         @Header("Authorization") token: String,

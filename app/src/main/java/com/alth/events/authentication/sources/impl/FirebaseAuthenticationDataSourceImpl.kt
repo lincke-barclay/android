@@ -1,14 +1,22 @@
 package com.alth.events.authentication.sources.impl
 
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.alth.events.authentication.models.FirebaseAuthenticationState
 import com.alth.events.authentication.sources.AuthenticationDataSource
 import com.alth.events.exceptions.IllegalAuthenticationStateException
 import com.alth.events.logging.impl.loggerFactory
-import com.alth.events.authentication.models.FirebaseAuthenticationState
+import com.alth.events.models.domain.authentication.results.ChangeNameResult
+import com.alth.events.models.domain.authentication.results.ReloadResult
+import com.alth.events.models.domain.authentication.results.SendVerificationEmailResult
+import com.alth.events.models.domain.authentication.results.SignInResult
+import com.alth.events.models.domain.authentication.results.SignUpResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
@@ -18,6 +26,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @Singleton
 class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
@@ -27,6 +36,7 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
 
     /**
      * Stateful Data
+     * Pretty much copies of FirebaseAuth but in flow form
      */
     private val _currentlySignedInUser =
         MutableStateFlow<FirebaseAuthenticationState>(FirebaseAuthenticationState.Unknown)
@@ -38,6 +48,9 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
     private lateinit var auth: FirebaseAuth
     private lateinit var owner: ComponentActivity
 
+    /**
+     * Lifecycle listener overrides
+     */
     override fun onCreate(owner: LifecycleOwner) {
         if (owner !is ComponentActivity) {
             throw IllegalArgumentException(
@@ -47,128 +60,195 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
         }
         this.auth = Firebase.auth
         this.auth.addAuthStateListener {
-            refresh()
+            refreshLocalCopyOfFirebaseUser()
         }
         this.owner = owner
     }
 
-    //765cuez0mf@rfcdrive.com
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
-        refresh()
+        refreshLocalCopyOfFirebaseUser()
     }
 
-    override fun signIn(email: String, password: String) {
-        _currentlySignedInUser.value = FirebaseAuthenticationState.Unknown
+    /**
+     * Authentication overrides
+     */
+    override suspend fun signIn(email: String, password: String): SignInResult =
+        suspendCoroutine { cont ->
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(owner) { task ->
+                    if (task.isSuccessful) {
+                        logger.debug("signInWithEmail:success")
+                        auth.currentUser ?: throw IllegalAuthenticationStateException(
+                            "Successfully signed in but " +
+                                    "user is null! This is a firebase problem"
+                        )
+                        cont.resume(SignInResult.Success)
+                    } else {
+                        logger.error(task.exception?.stackTraceToString() ?: "Error ")
+                        when (task.exception) {
+                            is FirebaseAuthInvalidUserException -> {
+                                cont.resume(SignInResult.ThatUserDoesntExist)
+                            }
 
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(owner) { task ->
-                if (task.isSuccessful) {
-                    logger.debug("signInWithEmail:success")
-                    auth.currentUser ?: throw IllegalAuthenticationStateException(
-                        "Successfully signed in but " +
-                                "user is null! This is a firebase problem"
-                    )
-                } else {
-                    logger.error(task.exception?.stackTraceToString() ?: "Error ")
-                    TODO("login fails")
+                            is FirebaseAuthInvalidCredentialsException -> {
+                                cont.resume(SignInResult.PasswordIsIncorrect)
+                            }
+
+                            else -> {
+                                throw Exception(
+                                    "Unaccounted for exception thrown in firebase signin.",
+                                    task.exception,
+                                )
+                            }
+                        }
+                    }
                 }
-            }
-    }
+        }
 
-    override fun signUp(email: String, password: String) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(owner) { task ->
-                if (task.isSuccessful) {
-                    logger.debug("signInWithEmail:success")
-                    auth.currentUser ?: throw IllegalAuthenticationStateException(
-                        "Successfully signed in but " +
-                                "user is null! This is a firebase problem"
-                    )
-                    sendVerificationEmailForCurrentlySignedInUser()
-                } else {
-                    logger.error(task.exception?.stackTraceToString() ?: "Error ")
-                    TODO("login fails")
+    override suspend fun signUp(email: String, password: String) =
+        suspendCoroutine { cont ->
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(owner) { task ->
+                    if (task.isSuccessful) {
+                        logger.debug("signInWithEmail:success")
+                        auth.currentUser ?: throw IllegalAuthenticationStateException(
+                            "Successfully signed in but " +
+                                    "user is null! This is a firebase problem"
+                        )
+                        cont.resume(SignUpResult.Success)
+                    } else {
+                        logger.error(task.exception?.stackTraceToString() ?: "Error ")
+                        when (task.exception) {
+                            is FirebaseAuthWeakPasswordException -> {
+                                cont.resume(SignUpResult.WeakPasswordException)
+                            }
+
+                            is FirebaseAuthInvalidCredentialsException -> {
+                                cont.resume(SignUpResult.EmailAddressMalformed)
+                            }
+
+                            is FirebaseAuthUserCollisionException -> {
+                                cont.resume(SignUpResult.UserCollision)
+                            }
+
+                            else -> {
+                                throw Exception(
+                                    "Unaccounted for exception thrown in firebase signup.",
+                                    task.exception,
+                                )
+                            }
+                        }
+                    }
                 }
-            }
-    }
+        }
 
     override fun signOut() {
         auth.signOut()
     }
 
-    private fun refresh() {
-        loggerFactory.getLogger(this)
-            .debug("Refreshing user state in data source. User was: ${currentlySignedInUser.value}")
+    private fun refreshLocalCopyOfFirebaseUser() {
+        logger.debug("Refreshing user state in data source. State was: ${currentlySignedInUser.value}")
+
         _currentlySignedInUser.value = auth.currentUser?.let {
-            loggerFactory.getLogger(this).debug("Refresh: New state is signed in: $it")
+            logger.debug("Refresh: New state is: $it")
             FirebaseAuthenticationState.SignedIn(it)
         } ?: run {
-            loggerFactory.getLogger(this).debug("Refresh: Not signed in - nothing changed")
+            logger.debug("Refresh: Not signed in - nothing changed")
             FirebaseAuthenticationState.SignedOut
         }
     }
 
-    override fun reload() {
-        loggerFactory.getLogger(this)
-            .debug("Reloading auth state, current state is: ${currentlySignedInUser.value}")
-        FirebaseAuth.getInstance().currentUser?.reload()?.addOnCompleteListener { it ->
-            if (it.isSuccessful) {
-                refresh()
-            } else {
-                loggerFactory.getLogger(this)
-                    .debug("Couldn't reload firebase user, reason: ${it.exception}")
-            }
-        }
-    }
+    override suspend fun reload(): ReloadResult =
+        suspendCoroutine { cont ->
+            logger.debug("Reloading auth state, current state is: ${currentlySignedInUser.value}")
 
-    override fun sendVerificationEmailForCurrentlySignedInUser() {
-        _currentlySignedInUser.value.let {
-            when (it) {
-                is FirebaseAuthenticationState.SignedIn -> {
-                    it.user.sendEmailVerification()
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Log.d(this::class.java.simpleName, "Email Sent")
-                            }
+            FirebaseAuth.getInstance().currentUser?.reload()?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    refreshLocalCopyOfFirebaseUser()
+                    cont.resume(ReloadResult.Success)
+                } else {
+                    loggerFactory.getLogger(this)
+                        .debug("Couldn't reload firebase user, reason: ${task.exception}")
+                    when (task.exception) {
+                        is FirebaseAuthInvalidUserException -> {
+                            cont.resume(ReloadResult.InvalidAccount)
                         }
-                }
 
-                else -> throw IllegalAuthenticationStateException(
-                    "Called send verification " +
-                            "email but no user is signed in"
-                )
-            }
-        }
-    }
-
-    override fun changeNameOfCurrentlySignedInUser(newName: String) {
-        _currentlySignedInUser.value.let {
-            when (it) {
-                is FirebaseAuthenticationState.SignedIn -> {
-                    val profileUpdates = userProfileChangeRequest {
-                        displayName = newName
+                        else -> {
+                            throw Exception(
+                                "Unaccounted for exception thrown in firebase reload.",
+                                task.exception,
+                            )
+                        }
                     }
-                    it.user.updateProfile(profileUpdates)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                loggerFactory.getLogger(this)
-                                    .debug("Successfully changed user name to $newName")
-                                reload()
-                            } else {
-                                loggerFactory.getLogger(this)
-                                    .error("Couldn't change user ${currentlySignedInUser.value} name to $newName")
-                            }
-                        }
                 }
-
-                else -> throw IllegalAuthenticationStateException(
-                    "Called change name" +
-                            "but no user is signed in"
-                )
             }
         }
-    }
+
+    override suspend fun sendVerificationEmailForCurrentlySignedInUser() =
+        suspendCoroutine { cont ->
+            _currentlySignedInUser.value.let {
+                when (it) {
+                    is FirebaseAuthenticationState.SignedIn -> {
+                        it.user.sendEmailVerification()
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    cont.resume(SendVerificationEmailResult.Success)
+                                } else {
+                                    throw Exception(
+                                        "Failed to send verification email for user.",
+                                        task.exception,
+                                    )
+                                }
+                            }
+                    }
+
+                    else -> throw IllegalAuthenticationStateException(
+                        "Tried to call send verification email but user is not signed in, " +
+                                "this is a bug or a race condition"
+                    )
+                }
+            }
+        }
+
+    override suspend fun changeNameOfCurrentlySignedInUser(newName: String) =
+        suspendCoroutine { cont ->
+            _currentlySignedInUser.value.let {
+                when (it) {
+                    is FirebaseAuthenticationState.SignedIn -> {
+                        val profileUpdates = userProfileChangeRequest {
+                            displayName = newName
+                        }
+                        it.user.updateProfile(profileUpdates)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    cont.resume(ChangeNameResult.Success)
+                                } else {
+                                    logger.error(task.exception?.stackTraceToString() ?: "Error ")
+                                    when (task.exception) {
+                                        is FirebaseAuthInvalidUserException -> {
+                                            cont.resume(ChangeNameResult.InvalidUserException)
+                                        }
+
+                                        else -> {
+                                            throw Exception(
+                                                "Unaccounted for exception thrown in firebase signup.",
+                                                task.exception,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                    }
+
+                    else -> throw IllegalAuthenticationStateException(
+                        "Called change name" +
+                                "but no user is signed in"
+                    )
+                }
+            }
+        }
 
     override fun getSignedInUserIdOrNull(): String? {
         return _currentlySignedInUser.value.let {
@@ -192,7 +272,10 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
                                 if (task.isSuccessful) {
                                     continuation.resume(task.result.token)
                                 } else {
-                                    continuation.resume(null)
+                                    throw Exception(
+                                        "Unexpected result from getIdToken ",
+                                        task.exception,
+                                    )
                                 }
                             }
                     }

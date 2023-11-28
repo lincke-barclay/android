@@ -16,7 +16,7 @@ import com.alth.events.database.models.events.EventEntity
 import com.alth.events.database.models.events.FeedEventEntity
 import com.alth.events.database.models.events.QueriedEventEntity
 import com.alth.events.database.models.friends.FriendshipEntity
-import com.alth.events.database.models.friends.QueriedUserEntity
+import com.alth.events.database.models.users.QueriedUserEntity
 import com.alth.events.database.models.users.PublicUserEntity
 
 @Database(

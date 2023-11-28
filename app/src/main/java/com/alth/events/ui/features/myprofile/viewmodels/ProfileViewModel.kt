@@ -2,9 +2,9 @@ package com.alth.events.ui.features.myprofile.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alth.events.networking.models.users.ingress.PrivateUserResponseDto
-import com.alth.events.data.repositories.AuthenticationRepository
 import com.alth.events.data.caching.CachingMeRepository
+import com.alth.events.data.repositories.AuthenticationRepository
+import com.alth.events.networking.models.users.ingress.PrivateUserResponseDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

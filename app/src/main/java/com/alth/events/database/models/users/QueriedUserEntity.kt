@@ -1,9 +1,7 @@
-package com.alth.events.database.models.friends
+package com.alth.events.database.models.users
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
-import com.alth.events.database.models.users.PublicUserEntity
 
 @Entity(
     tableName = "query_user_result",
@@ -12,9 +10,10 @@ import com.alth.events.database.models.users.PublicUserEntity
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("userId"),
         onDelete = ForeignKey.CASCADE,
-    )]
+    )],
+    primaryKeys = ["userId", "serializedQuery"]
 )
 data class QueriedUserEntity(
-    @PrimaryKey val userId: String,
+    val userId: String,
     val serializedQuery: String,
 )

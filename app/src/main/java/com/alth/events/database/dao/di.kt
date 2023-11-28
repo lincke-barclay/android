@@ -1,7 +1,6 @@
 package com.alth.events.database.dao
 
 import com.alth.events.database.AppDatabase
-import com.alth.events.database.dao.users.PublicUserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

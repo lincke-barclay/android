@@ -1,8 +1,8 @@
 package com.alth.events.networking.sources
 
 import com.alth.events.authentication.sources.AuthenticationDataSource
-import com.alth.events.networking.models.NetworkResult
 import com.alth.events.networking.apis.FriendsApi
+import com.alth.events.networking.models.NetworkResult
 import com.alth.events.networking.withIDAndTokenOrThrowNetworkExec
 import javax.inject.Inject
 
@@ -43,20 +43,6 @@ class NetworkFriendshipDataSource @Inject constructor(
             userId = id,
             page = page,
             pageSize = pageSize,
-        )
-    }
-
-    suspend fun getSuggestedFriends(
-        page: Int,
-        pageSize: Int,
-        queryStr: String,
-    ) = authenticationDataSource.withIDAndTokenOrThrowNetworkExec { id, token ->
-        friendsApi.getSuggestedFriends(
-            token = token,
-            userId = id,
-            page = page,
-            pageSize = pageSize,
-            queryStr,
         )
     }
 

@@ -122,4 +122,7 @@ dependencies {
 
     // Pull refresh
     implementation("eu.bambooapps:compose-material3-pullrefresh:1.0.0")
+
+    // Image cropper
+    implementation("com.vanniktech:android-image-cropper:4.5.0")
 }

@@ -19,7 +19,8 @@ import javax.inject.Inject
 class MyEventsViewModel @Inject constructor(
     pagingMyEventsRepository: PagingMyEventsRepository,
 ) : ViewModel() {
-    private val _anonymousEventsFlow = MutableStateFlow<Flow<PagingData<AnonymousEvent>>>(emptyFlow())
+    private val _anonymousEventsFlow =
+        MutableStateFlow<Flow<PagingData<AnonymousEvent>>>(emptyFlow())
     val myEventsFlow = _anonymousEventsFlow.asStateFlow()
 
     init {

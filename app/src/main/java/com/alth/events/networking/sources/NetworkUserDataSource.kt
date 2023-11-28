@@ -1,10 +1,10 @@
 package com.alth.events.networking.sources
 
 import com.alth.events.authentication.sources.AuthenticationDataSource
+import com.alth.events.networking.apis.UsersApi
 import com.alth.events.networking.models.NetworkResult
 import com.alth.events.networking.models.users.ingress.PrivateUserResponseDto
 import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
-import com.alth.events.networking.apis.UsersApi
 import com.alth.events.networking.withIDAndTokenOrThrowNetworkExec
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -30,6 +30,16 @@ class NetworkUserDataSource @Inject constructor(
                     token = token,
                     userId = id,
                 )
+            )
+        }
+
+    suspend fun getUsersByQuery(page: Int, pageSize: Int, queryStr: String) =
+        authenticationDataSource.withIDAndTokenOrThrowNetworkExec { _, token ->
+            usersApi.getUsersByQuery(
+                token = token,
+                page = page,
+                pageSize = pageSize,
+                queryStr = queryStr,
             )
         }
 }

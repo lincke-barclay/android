@@ -77,7 +77,7 @@ fun MyFriendsScreen(
         UserHorizontalBarItem(
             user.name,
             user.profilePictureUrl,
-            trailingText = { "Organizer: $it" }
+            trailingText = { it }
         )
     }
 }
@@ -114,7 +114,7 @@ fun FriendsISentScreen(
         UserHorizontalBarItem(
             user.name,
             user.profilePictureUrl,
-            trailingText = { "Organizer: $it" }
+            trailingText = { it }
         )
     }
 }

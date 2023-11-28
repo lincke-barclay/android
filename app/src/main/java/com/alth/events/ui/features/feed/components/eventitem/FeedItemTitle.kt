@@ -9,15 +9,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.alth.events.R
 import com.alth.events.ui.components.UserHorizontalBarItem
 
 @Composable
 fun FeedTitle(
     title: String,
     organizerName: String,
-    organizerProfilePictureUrl: String,
+    organizerProfilePictureUrl: String?,
     date: String,
 ) {
     Column(
@@ -27,7 +29,7 @@ fun FeedTitle(
     ) {
         UserHorizontalBarItem(
             organizerName,
-            organizerProfilePictureUrl,
+            organizerProfilePictureUrl ?: stringResource(id = R.string.default_profile_picture_url),
             trailingText = { "Organizer: $it" }
         )
         Text(

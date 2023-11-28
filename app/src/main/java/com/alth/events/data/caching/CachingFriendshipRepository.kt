@@ -80,26 +80,6 @@ class CachingFriendshipRepository @Inject constructor(
         }
     }
 
-    suspend fun getSuggestedFriends(
-        page: Int,
-        pageSize: Int,
-        queryStr: String,
-    ) = object : GenericCachingOperation<List<PublicUserResponseDto>>(appScope, listOf()) {
-        override suspend fun getFromSourceOfTruth(): InternalCacheResult<List<PublicUserResponseDto>> {
-            return networkFriendshipDataSource.getSuggestedFriends(page, pageSize, queryStr)
-                .toInternalCacheResult()
-        }
-
-        override suspend fun getFromCache(): InternalCacheResult<List<PublicUserResponseDto>> {
-            return InternalCacheResult.Success(cachedSuggestedFriends)
-        }
-
-        override suspend fun saveToCache(t: List<PublicUserResponseDto>): InternalCacheResult<Unit> {
-            cachedSuggestedFriends = t
-            return InternalCacheResult.Success(Unit)
-        }
-    }
-
     suspend fun sendFriendRequest(recipientId: String) {
         networkFriendshipDataSource.postFriendship(recipientId)
     }

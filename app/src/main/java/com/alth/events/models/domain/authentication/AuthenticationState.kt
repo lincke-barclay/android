@@ -9,9 +9,7 @@ sealed interface AuthenticationState {
         val name: String?,
     ) : AuthenticationState
 
-    data class UserUninitialized(
-        val name: String?,
-    ) : AuthenticationState
+    data object UsernameNotSet : AuthenticationState
 
     data object Unknown : AuthenticationState
 

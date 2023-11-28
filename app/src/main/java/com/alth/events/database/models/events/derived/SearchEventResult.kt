@@ -1,8 +1,8 @@
 package com.alth.events.database.models.events.derived
 
 import androidx.room.ColumnInfo
-import com.alth.events.database.models.users.PublicUserEntity
 import com.alth.events.database.models.events.EventEntity
+import com.alth.events.database.models.users.PublicUserEntity
 import com.alth.events.models.domain.events.PublicEventQuery
 import kotlinx.datetime.Instant
 

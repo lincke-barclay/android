@@ -26,9 +26,8 @@ fun LazyListSearchUserResult(
             UserHorizontalBarItem(
                 name = it.name,
                 profilePictureUrl = it.profilePictureUrl,
-            ) {
-                "Result"
-            }
+                trailingText = { it }
+            )
             Divider(thickness = 3.dp)
         }
     }
@@ -50,9 +49,8 @@ fun LimitedLazyListSearchUserResult(
                     UserHorizontalBarItem(
                         name = user.name,
                         profilePictureUrl = user.profilePictureUrl,
-                    ) {
-                        "Result"
-                    }
+                        trailingText = { it }
+                    )
                     Divider(thickness = 3.dp)
                 }
             }

@@ -10,7 +10,7 @@ class EditProfileViewModel @Inject constructor(
     private val authenticationRepository: AuthenticationRepository,
 ) : ViewModel() {
     fun changeName(newName: String) {
-        authenticationRepository.changeNameOfCurrentlySignedInUser(newName)
+        //authenticationRepository.changeNameOfCurrentlySignedInUser(newName)
     }
 
     fun signOut() {

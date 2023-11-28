@@ -7,7 +7,7 @@ data class PrivateUserResponseDto(
     val id: String,
     val name: String,
     val email: String,
-    val profilePictureUrl: String,
+    val profilePictureUrl: String?,
 ) {
     companion object {
         fun empty() = PrivateUserResponseDto("", "", "", "")

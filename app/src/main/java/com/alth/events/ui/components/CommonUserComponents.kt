@@ -17,14 +17,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.alth.events.R
 
 @Composable
 fun UserHorizontalBarItem(
     name: String,
-    profilePictureUrl: String,
+    profilePictureUrl: String?,
     trailingText: (name: String) -> String = { it },
     rightJustifiedContent: @Composable () -> Unit = {},
 ) {
@@ -49,7 +51,10 @@ fun UserHorizontalBarItem(
                         .border(1.dp, Color.Black, CircleShape),
                     contentScale = ContentScale.Crop,
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(profilePictureUrl)
+                        .data(
+                            profilePictureUrl
+                                ?: stringResource(id = R.string.default_profile_picture_url)
+                        )
                         .build(),
                     contentDescription = null,
                 )

@@ -18,10 +18,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.alth.events.R
 import com.alth.events.networking.models.users.ingress.PrivateUserResponseDto
 import com.alth.events.ui.features.myprofile.calendar.MyEventsMain
 import com.alth.events.ui.features.myprofile.friends.MyFriendsMain
@@ -59,7 +61,8 @@ fun ProfileMainStateless(
                 .clip(CircleShape)
                 .border(2.dp, Color.Black, CircleShape),
             contentScale = ContentScale.Crop,
-            model = signedInUser.profilePictureUrl,
+            model = signedInUser.profilePictureUrl
+                ?: stringResource(id = R.string.default_profile_picture_url),
             contentDescription = "Translated description of what the image contains"
         )
         Text(

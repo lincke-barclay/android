@@ -19,4 +19,6 @@ class UserLocalDataSource @Inject constructor(
     }
 
     suspend fun getPublicUsers(): List<PublicUserEntity> = userDao.getUsers()
+
+    suspend fun clearAll() = userDao.clearAll()
 }

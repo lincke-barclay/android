@@ -2,4 +2,5 @@
 <resources>
     <string name="app_url">http://10.0.2.2:8080</string>
     <!-- <string name="app_url">https://apicommune.com</string> -->
+    <string name="default_profile_picture_url">https://picsum.photos/200</string>
 </resources>
