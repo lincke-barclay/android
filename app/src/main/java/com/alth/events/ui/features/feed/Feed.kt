@@ -7,15 +7,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.alth.events.R
 import com.alth.events.ui.features.feed.components.StatefulLazyListFeed
 import com.alth.events.ui.features.feed.viewmodels.FeedMainViewModel
+import com.alth.events.ui.layouts.BottomAppNavBar
+import com.alth.events.ui.navigation.BottomAppBarRoute
 
 @Composable
-fun FeedMain(
-    feedMainViewModel: FeedMainViewModel,
+fun Feed(
+    feedMainViewModel: FeedMainViewModel = hiltViewModel(),
     navigateToNewEvent: () -> Unit,
+    navigateToProfile: () -> Unit,
+    navigateToSearch: () -> Unit,
 ) {
     val feedEvents = feedMainViewModel.eventPagingFlow.collectAsLazyPagingItems()
 
@@ -27,7 +32,16 @@ fun FeedMain(
                     contentDescription = "foo"
                 )
             }
-        }) { padding ->
+        },
+        bottomBar = {
+            BottomAppNavBar(
+                navigateToFeed = { /* nothing to do */ },
+                navigateToProfile = navigateToProfile,
+                navigateToSearch = navigateToSearch,
+                currentRoute = BottomAppBarRoute.Feed,
+            )
+        },
+    ) { padding ->
         StatefulLazyListFeed(
             events = feedEvents,
             modifier = Modifier.padding(padding),

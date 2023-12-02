@@ -24,6 +24,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -41,6 +42,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alth.events.R
+import com.alth.events.util.Keyboard
+import com.alth.events.util.keyboardAsState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,6 +54,7 @@ fun Login(
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val isKeyboardShowing by keyboardAsState()
 
     LaunchedEffect(key1 = loginViewModel.errorMessage) {
         loginViewModel.errorMessage?.let {
@@ -88,6 +92,7 @@ fun Login(
             submitAvailable = loginViewModel.submitAvailable,
             onEmailChange = loginViewModel::onEmailChange,
             onPasswordChange = loginViewModel::onPasswordChange,
+            isKeyboardShowing = isKeyboardShowing == Keyboard.Opened,
         )
     }
 }
@@ -102,6 +107,7 @@ fun LoginStateless(
     onPasswordChange: (String) -> Unit,
     loading: Boolean,
     submitAvailable: Boolean,
+    isKeyboardShowing: Boolean,
 ) {
     Box(
         modifier = modifier
@@ -116,19 +122,27 @@ fun LoginStateless(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Top,
         ) {
-            Text(
-                text = "Login",
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.padding(top = 64.dp)
-            )
-            Text(
-                text = "Please sign in to continue",
-                style = MaterialTheme.typography.labelLarge,
-            )
+            if (!isKeyboardShowing) {
+                Text(
+                    text = "Login",
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.padding(top = 64.dp)
+                )
+                Text(
+                    text = "Please sign in to continue",
+                    style = MaterialTheme.typography.labelLarge,
+                )
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 36.dp),
+                    .then(
+                        if (!isKeyboardShowing) {
+                            Modifier.padding(top = 36.dp)
+                        } else {
+                            Modifier
+                        }
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
@@ -214,5 +228,6 @@ fun PreviewSignInScreen() {
         submitAvailable = true,
         onPasswordChange = {},
         onEmailChange = {},
+        isKeyboardShowing = false,
     )
 }

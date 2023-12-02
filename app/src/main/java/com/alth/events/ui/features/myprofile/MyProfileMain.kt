@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -17,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,18 +28,34 @@ import com.alth.events.networking.models.users.ingress.PrivateUserResponseDto
 import com.alth.events.ui.features.myprofile.calendar.MyEventsMain
 import com.alth.events.ui.features.myprofile.friends.MyFriendsMain
 import com.alth.events.ui.features.myprofile.viewmodels.ProfileViewModel
+import com.alth.events.ui.layouts.BottomAppNavBar
+import com.alth.events.ui.navigation.BottomAppBarRoute
 
 
 @Composable
 fun MyProfile(
     pvm: ProfileViewModel = hiltViewModel(),
+    navigateToFeed: () -> Unit,
+    navigateToSearch: () -> Unit,
 ) {
     val currentlySignedInUser by pvm.uiState.collectAsState()
-    currentlySignedInUser?.let {
-        ProfileMainStateless(
-            onSignOut = { pvm.signOut() },
-            signedInUser = it,
-        )
+    currentlySignedInUser?.let { signedInUser ->
+        Scaffold(
+            bottomBar = {
+                BottomAppNavBar(
+                    navigateToFeed = navigateToFeed,
+                    navigateToProfile = { /* do nothing */ },
+                    navigateToSearch = navigateToSearch,
+                    currentRoute = BottomAppBarRoute.Profile,
+                )
+            },
+        ) { innerPadding ->
+            ProfileMainStateless(
+                onSignOut = { pvm.signOut() },
+                signedInUser = signedInUser,
+                modifier = Modifier.padding(innerPadding),
+            )
+        }
     }
 }
 
@@ -47,12 +63,11 @@ fun MyProfile(
 fun ProfileMainStateless(
     onSignOut: () -> Unit,
     signedInUser: PrivateUserResponseDto,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(12.dp)
-            .testTag("profileEntryPoint"),
+        modifier
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AsyncImage(

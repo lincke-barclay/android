@@ -3,13 +3,11 @@ package com.alth.events.data.repositories.paging.users
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.alth.events.data.caching.users.QueriedUsersCachingManager
 import com.alth.events.data.mediators.users.QueriedUserRemoteMediator
 import com.alth.events.database.models.users.PublicUserEntity
 import com.alth.events.database.sources.users.QueriedUserLocalDataSource
 import com.alth.events.logging.impl.loggerFactory
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)

@@ -6,15 +6,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alth.events.ui.viewmodels.landing.EmailVerificationViewModel
 import kotlinx.coroutines.launch
@@ -25,9 +30,12 @@ fun UnverifiedUser(
 ) {
     var scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val secondsTillReset = emailVerificationViewModel.secondsTillTryAgain
+    val errorMessage = emailVerificationViewModel.errorMessage
+    val loading = emailVerificationViewModel.loading
 
-    LaunchedEffect(key1 = emailVerificationViewModel.errorMessage) {
-        emailVerificationViewModel.errorMessage?.let {
+    LaunchedEffect(key1 = errorMessage) {
+        errorMessage?.let {
             scope.launch {
                 snackbarHostState.showSnackbar(it)
             }
@@ -37,7 +45,7 @@ fun UnverifiedUser(
 
     Scaffold(
         topBar = {
-            // TODO
+            //
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -45,10 +53,10 @@ fun UnverifiedUser(
     ) {
         UnverifiedUserStateless(
             modifier = Modifier.padding(it),
-            sendEmail = emailVerificationViewModel::onClickSendVerificationEmail,
-            tryAgain = emailVerificationViewModel::reload,
+            sendEmail = emailVerificationViewModel::tryAgain,
             signOut = emailVerificationViewModel::signOut,
-            loading = emailVerificationViewModel.loading,
+            loading = loading,
+            secondsTillReset = secondsTillReset,
         )
     }
 }
@@ -58,33 +66,63 @@ fun UnverifiedUser(
 fun UnverifiedUserStateless(
     modifier: Modifier = Modifier,
     sendEmail: () -> Unit,
-    tryAgain: () -> Unit,
     signOut: () -> Unit,
     loading: Boolean,
+    secondsTillReset: Int,
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(20.dp),
+        contentAlignment = Alignment.Center,
     ) {
         if (loading) {
             CircularProgressIndicator()
         }
-        Column {
-            Text("Signed In but unverified")
-            Button(
-                onClick = sendEmail,
-            ) {
-                Text("Send Verification Email")
-            }
-            Button(
-                onClick = tryAgain,
-            ) {
-                Text("Try Again")
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                "Email Sent",
+                style = MaterialTheme.typography.headlineLarge,
+            )
+            Text(
+                "We just sent you an email with instructions to " +
+                        "activate your account. If you don't see the email in your inbox, be" +
+                        " sure to check your spam folder as well",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Text(
+                "Need further assistance? Contact our support team at " +
+                        "lincketheo@gmail.com",
+                style = MaterialTheme.typography.bodySmall,
+            )
+            Text("Didn't get it?")
+            if (secondsTillReset == 0) {
+                TextButton(onClick = sendEmail) {
+                    Text("Try Again")
+                }
+            } else {
+                TextButton(
+                    onClick = sendEmail,
+                ) {
+                    Text("Try again in $secondsTillReset seconds")
+                }
             }
             Button(onClick = signOut) {
-                Text("Sign Out")
+                Text("Log In")
             }
         }
     }
 }
 
+@Composable
+@Preview
+fun PreviewUnverifiedUser() {
+    UnverifiedUserStateless(
+        sendEmail = { /*TODO*/ },
+        signOut = { /*TODO*/ },
+        loading = false,
+        secondsTillReset = 5,
+    )
+}

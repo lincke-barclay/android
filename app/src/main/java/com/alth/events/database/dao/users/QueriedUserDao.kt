@@ -4,8 +4,8 @@ import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.alth.events.database.models.users.QueriedUserEntity
 import com.alth.events.database.models.users.PublicUserEntity
+import com.alth.events.database.models.users.QueriedUserEntity
 
 @Dao
 interface QueriedUserDao {

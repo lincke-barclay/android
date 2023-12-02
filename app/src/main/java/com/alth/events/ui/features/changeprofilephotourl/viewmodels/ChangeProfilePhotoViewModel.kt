@@ -7,6 +7,4 @@ import javax.inject.Inject
 @HiltViewModel
 class ChangeProfilePhotoViewModel @Inject constructor(
 
-) : ViewModel() {
-
-}
+) : ViewModel()

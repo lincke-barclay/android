@@ -48,7 +48,7 @@ class CreateAccountViewModel @Inject constructor(
                     }
 
                     SignUpResult.Success -> {
-                        // Do nothin, we'll change soon
+                        /* Nothing to do - we'll transition soon */
                     }
 
                     SignUpResult.UserCollision -> {

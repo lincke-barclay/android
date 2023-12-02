@@ -5,6 +5,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.alth.events.authentication.models.FirebaseAuthenticationState
 import com.alth.events.authentication.sources.AuthenticationDataSource
+import com.alth.events.di.ApplicationScope
 import com.alth.events.exceptions.IllegalAuthenticationStateException
 import com.alth.events.logging.impl.loggerFactory
 import com.alth.events.models.domain.authentication.results.ChangeNameResult
@@ -20,8 +21,10 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,8 +32,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @Singleton
-class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
-    AuthenticationDataSource, DefaultLifecycleObserver {
+class FirebaseAuthenticationDataSourceImpl @Inject constructor(
+    @ApplicationScope private val appScope: CoroutineScope // Used for email verification stage to launch email scope in the background
+) : AuthenticationDataSource, DefaultLifecycleObserver {
 
     private val logger = loggerFactory.getLogger(this)
 
@@ -41,6 +45,7 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
     private val _currentlySignedInUser =
         MutableStateFlow<FirebaseAuthenticationState>(FirebaseAuthenticationState.Unknown)
     override val currentlySignedInUser = _currentlySignedInUser.asStateFlow()
+
 
     /**
      * Initialized in launching activity's onCreate function
@@ -59,15 +64,18 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
             )
         }
         this.auth = Firebase.auth
-        this.auth.addAuthStateListener {
-            refreshLocalCopyOfFirebaseUser()
-        }
-        this.owner = owner
-    }
 
-    override fun onStart(owner: LifecycleOwner) {
-        super.onStart(owner)
-        refreshLocalCopyOfFirebaseUser()
+        this.auth.addAuthStateListener { auth ->
+            _currentlySignedInUser.value = auth.currentUser?.let { user ->
+                logger.debug("Refresh: New state is: $user")
+                FirebaseAuthenticationState.SignedIn(user)
+            } ?: run {
+                logger.debug("Refresh: Not signed in - nothing changed")
+                FirebaseAuthenticationState.SignedOut
+            }
+        }
+
+        this.owner = owner
     }
 
     /**
@@ -116,6 +124,9 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
                             "Successfully signed in but " +
                                     "user is null! This is a firebase problem"
                         )
+                        appScope.launch {
+                            sendVerificationEmailForCurrentlySignedInUser()
+                        }
                         cont.resume(SignUpResult.Success)
                     } else {
                         logger.warn("Failed to create account", task.exception)
@@ -147,25 +158,12 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
         auth.signOut()
     }
 
-    private fun refreshLocalCopyOfFirebaseUser() {
-        logger.debug("Refreshing user state in data source. State was: ${currentlySignedInUser.value}")
-
-        _currentlySignedInUser.value = auth.currentUser?.let {
-            logger.debug("Refresh: New state is: $it")
-            FirebaseAuthenticationState.SignedIn(it)
-        } ?: run {
-            logger.debug("Refresh: Not signed in - nothing changed")
-            FirebaseAuthenticationState.SignedOut
-        }
-    }
-
     override suspend fun reload(): ReloadResult =
         suspendCoroutine { cont ->
             logger.debug("Reloading auth state, current state is: ${currentlySignedInUser.value}")
 
             FirebaseAuth.getInstance().currentUser?.reload()?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    refreshLocalCopyOfFirebaseUser()
                     cont.resume(ReloadResult.Success)
                 } else {
                     logger.warn("Failed to reload", task.exception)
@@ -188,6 +186,7 @@ class FirebaseAuthenticationDataSourceImpl @Inject constructor() :
     override suspend fun sendVerificationEmailForCurrentlySignedInUser() =
         suspendCoroutine { cont ->
             _currentlySignedInUser.value.let {
+                logger.debug("Sending verification email to $it")
                 when (it) {
                     is FirebaseAuthenticationState.SignedIn -> {
                         it.user.sendEmailVerification()

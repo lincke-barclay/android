@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -38,16 +39,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alth.events.R
+import com.alth.events.util.Keyboard
+import com.alth.events.util.keyboardAsState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateNewAccount(
     navigateBack: () -> Unit,
-    createAccountViewModel: CreateAccountViewModel = hiltViewModel()
+    createAccountViewModel: CreateAccountViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val isKeyboardOpen by keyboardAsState()
 
     LaunchedEffect(key1 = createAccountViewModel.errorMessage) {
         createAccountViewModel.errorMessage?.let {
@@ -83,7 +87,8 @@ fun CreateNewAccount(
             onPasswordChange = createAccountViewModel::onPasswordChange,
             onConfirmPasswordChange = createAccountViewModel::onConfirmPasswordChange,
             submitAvailable = createAccountViewModel.submitAvailable,
-            loading = createAccountViewModel.loading
+            loading = createAccountViewModel.loading,
+            isKeyboardOpen = isKeyboardOpen == Keyboard.Opened,
         )
     }
 }
@@ -100,6 +105,7 @@ fun CreateNewAccountStateless(
     onConfirmPasswordChange: (String) -> Unit,
     loading: Boolean,
     submitAvailable: Boolean,
+    isKeyboardOpen: Boolean,
 ) {
     Box(
         modifier = modifier
@@ -114,19 +120,28 @@ fun CreateNewAccountStateless(
                 .imePadding(),
             verticalArrangement = Arrangement.Top,
         ) {
-            Text(
-                text = "Create New Account",
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.padding(top = 64.dp)
-            )
-            Text(
-                text = "Please enter your information to continue",
-                style = MaterialTheme.typography.labelLarge,
-            )
+            // Only display info if keyboard is open to save space
+            if (!isKeyboardOpen) {
+                Text(
+                    text = "Create New Account",
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.padding(top = 64.dp)
+                )
+                Text(
+                    text = "Please enter your information to continue",
+                    style = MaterialTheme.typography.labelLarge,
+                )
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 36.dp),
+                    .then(
+                        if (!isKeyboardOpen) {
+                            Modifier.padding(top = 36.dp)
+                        } else {
+                            Modifier
+                        }
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(

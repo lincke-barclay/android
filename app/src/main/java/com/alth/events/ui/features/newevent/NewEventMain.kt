@@ -4,17 +4,25 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.alth.events.R
 import com.alth.events.ui.features.newevent.viewmodels.NewEventUiState
 import com.alth.events.ui.features.newevent.viewmodels.NewEventViewModel
 import kotlinx.datetime.Clock
@@ -25,18 +33,35 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewEventMain(
     vm: NewEventViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
 ) {
     val uiState by vm.uiState.collectAsState()
-    NewEventMainNoViewModel(
-        uiState = uiState,
-        onChangeStartDate = vm::changeStartDate,
-        onChangeEndDate = vm::changeEndDate,
-        navigateBack = {},
-    )
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Create new event") },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+                            contentDescription = "Back button for create new event screen",
+                        )
+                    }
+                },
+            )
+        }
+    ) {
+        NewEventMainNoViewModel(
+            uiState = uiState,
+            onChangeStartDate = vm::changeStartDate,
+            onChangeEndDate = vm::changeEndDate,
+            modifier = Modifier.padding(it)
+        )
+    }
 }
 
 @Composable
@@ -44,10 +69,10 @@ fun NewEventMainNoViewModel(
     uiState: NewEventUiState,
     onChangeStartDate: (Instant) -> Unit,
     onChangeEndDate: (Instant) -> Unit,
-    navigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .verticalScroll(rememberScrollState())
     ) {
         DatePickSection(
@@ -185,6 +210,5 @@ fun PreviewNewEvent(
         ),
         onChangeStartDate = {},
         onChangeEndDate = {},
-        navigateBack = {},
     )
 }

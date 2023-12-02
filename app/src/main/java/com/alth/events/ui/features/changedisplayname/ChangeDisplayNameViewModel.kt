@@ -23,9 +23,12 @@ class ChangeDisplayNameViewModel @Inject constructor(
         private set
 
     var loading by mutableStateOf(false)
+
+    val nameIsValid get() = name.length > 2
+
     private var changeNameJob: Job = Job().also { it.complete() }
 
-    fun changeName() {
+    fun changeName(onSuccess: () -> Unit) {
         if (!changeNameJob.isActive) {
             changeNameJob = viewModelScope.launch {
                 loading = true
@@ -36,6 +39,7 @@ class ChangeDisplayNameViewModel @Inject constructor(
 
                     ChangeNameResult.Success -> {
                         // Do nothing
+                        onSuccess()
                     }
                 }
             }
