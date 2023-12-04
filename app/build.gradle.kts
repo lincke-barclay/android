@@ -130,4 +130,11 @@ dependencies {
 
     // Core De sugaring For Java 8+ libs
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
+    // OSM
+    implementation("org.osmdroid:osmdroid-android:6.1.18-SNAPSHOT")
+    implementation("com.utsman:osmandcompose")
+
+    // compose calendar
+    implementation("com.theo:composecalendar")
 }

@@ -19,7 +19,6 @@ import com.alth.events.R
 import com.alth.events.ui.features.common.CancelButton
 import com.alth.events.ui.features.common.CheckButton
 import com.alth.events.ui.features.common.GenericLazyPager
-import com.alth.events.ui.features.myprofile.viewmodels.FriendISentViewModel
 import com.alth.events.ui.features.myprofile.viewmodels.FriendsISentPagingViewModel
 import com.alth.events.ui.features.myprofile.viewmodels.FriendsSentToMePagingViewModel
 import com.alth.events.ui.features.myprofile.viewmodels.MyFriendsPagingViewModel
@@ -120,15 +119,10 @@ fun FriendsISentScreen(
             user.profilePictureUrl,
         ) {
             Row {
-                CancelButton(action = { friendsISentPagingViewModel.cancel(user.id) })
+                //CancelButton(action = { friendsISentPagingViewModel.cancel(user.id) })
+                Text("Foo")
             }
         }
     }
 }
 
-@Composable
-fun FriendISentRow(
-    vm: FriendISentViewModel = hiltViewModel()
-) {
-
-}

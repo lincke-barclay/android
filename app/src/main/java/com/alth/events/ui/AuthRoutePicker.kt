@@ -6,10 +6,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alth.events.models.authentication.AuthenticationState
-import com.alth.events.ui.features.changedisplayname.ChangeDisplayName
-import com.alth.events.ui.features.splashscreen.SplashScreen
-import com.alth.events.ui.features.emaiverificiation.UnverifiedUser
 import com.alth.events.ui.features.authentication.AuthenticationViewModel
+import com.alth.events.ui.features.changedisplayname.ChangeDisplayName
+import com.alth.events.ui.features.emaiverificiation.UnverifiedUser
+import com.alth.events.ui.features.splashscreen.SplashScreen
 
 /**
  * Renders a certain nav graph or plain screen

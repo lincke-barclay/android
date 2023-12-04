@@ -6,8 +6,8 @@ import com.alth.events.database.sources.events.SearchEventsLocalDataSource
 import com.alth.events.database.sources.users.UserLocalDataSource
 import com.alth.events.models.SortDirection
 import com.alth.events.models.events.EventQuery
-import com.alth.events.networking.models.NetworkResult
 import com.alth.events.models.events.EventSortBy
+import com.alth.events.networking.models.NetworkResult
 import com.alth.events.networking.models.events.ingress.MinimalEventListResponseDto
 import com.alth.events.networking.sources.NetworkEventDataSource
 import javax.inject.Inject

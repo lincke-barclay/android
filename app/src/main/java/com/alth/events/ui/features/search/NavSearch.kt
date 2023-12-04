@@ -6,8 +6,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.alth.events.ui.navigation.RootRoute
 import com.alth.events.ui.navigation.navigateBack
-import com.alth.events.ui.navigation.navigateToFeed
-import com.alth.events.ui.navigation.navigateToProfile
 
 fun NavGraphBuilder.searchNavGraph(navController: NavHostController) {
     navigation(startDestination = "search/main", route = RootRoute.Search.route) {

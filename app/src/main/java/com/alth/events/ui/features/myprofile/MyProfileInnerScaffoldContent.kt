@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import com.alth.events.ui.features.myprofile.calendar.MyEventsMain
 import com.alth.events.ui.features.myprofile.friends.MyFriendsMain
+import com.theo.composecalendar.Calendar
 
 enum class ProfileTabOptions(
     val title: String,
@@ -38,7 +39,7 @@ fun MyProfileInnerScaffoldContent(
         )
         when (selectedOption) {
             ProfileTabOptions.Calendar -> {
-                Text("Calendar")
+                Calendar()
             }
 
             ProfileTabOptions.Friends -> {

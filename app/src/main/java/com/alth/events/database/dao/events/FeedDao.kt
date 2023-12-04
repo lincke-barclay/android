@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.alth.events.database.models.events.FeedEventEntity
 import com.alth.events.database.models.events.derived.FeedEvent
-import kotlinx.datetime.Instant
 
 @Dao
 interface FeedDao {

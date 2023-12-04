@@ -6,6 +6,9 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.46" apply false
     id("com.google.firebase.appdistribution") version "4.0.1" apply false
 
+    id("com.vanniktech.maven.publish") version "0.25.2" apply false // TODO - figure out how not to include this
+
+
     kotlin("jvm") version "1.9.0" apply false
     kotlin("plugin.serialization") version "1.9.0" apply false
     id("com.android.library") version "8.1.2" apply false
