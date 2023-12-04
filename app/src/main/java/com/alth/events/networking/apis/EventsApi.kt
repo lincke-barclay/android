@@ -1,8 +1,7 @@
 package com.alth.events.networking.apis
 
-import com.alth.events.networking.models.PrivateEventSortBy
-import com.alth.events.networking.models.PublicEventSortBy
-import com.alth.events.networking.models.SortDirection
+import com.alth.events.models.SortDirection
+import com.alth.events.models.events.EventSortBy
 import com.alth.events.networking.models.events.egress.POSTEventRequestDTO
 import com.alth.events.networking.models.events.ingress.MinimalEventListResponseDto
 import com.alth.events.networking.models.events.ingress.PrivateEventResponseDto
@@ -25,7 +24,7 @@ interface EventsApi {
         @Query("toStartDateTimeINC") toStartDateTimeInclusive: Instant? = null,
         @Query("toEndDateTimeINC") toEndDateTimeInclusive: Instant? = null,
         @Query("titleContainsIC") titleContainsIC: String? = null,
-        @Query("sortBy") sortBy: PrivateEventSortBy? = null,
+        @Query("sortBy") sortBy: EventSortBy? = null,
         @Query("sortDirection") sortDirection: SortDirection? = null,
         @Query("limit") limit: Int,
     ): List<PrivateEventResponseDto> // TODO - this will eventually be a string
@@ -53,7 +52,7 @@ interface EventsApi {
         @Query("toStartDateTimeINC") toStartDateTimeInclusive: Instant? = null,
         @Query("toEndDateTimeINC") toEndDateTimeInclusive: Instant? = null,
         @Query("titleContainsIC") titleContainsIC: String? = null,
-        @Query("sortBy") sortBy: PublicEventSortBy? = null,
+        @Query("sortBy") sortBy: EventSortBy? = null,
         @Query("sortDirection") sortDirection: SortDirection? = null,
         @Query("limit") limit: Int,
     ): MinimalEventListResponseDto

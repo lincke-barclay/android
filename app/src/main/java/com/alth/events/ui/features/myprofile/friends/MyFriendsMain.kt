@@ -1,24 +1,29 @@
 package com.alth.events.ui.features.myprofile.friends
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.Button
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.alth.events.R
-import com.alth.events.ui.components.GenericLazyPager
-import com.alth.events.ui.components.UserHorizontalBarItem
+import com.alth.events.ui.features.common.CancelButton
+import com.alth.events.ui.features.common.CheckButton
+import com.alth.events.ui.features.common.GenericLazyPager
+import com.alth.events.ui.features.myprofile.viewmodels.FriendISentViewModel
 import com.alth.events.ui.features.myprofile.viewmodels.FriendsISentPagingViewModel
 import com.alth.events.ui.features.myprofile.viewmodels.FriendsSentToMePagingViewModel
 import com.alth.events.ui.features.myprofile.viewmodels.MyFriendsPagingViewModel
+import com.alth.events.ui.features.users.UserHorizontalBar
 
 sealed class ProfileScreenPage(
     val label: String,
@@ -44,6 +49,7 @@ sealed class ProfileScreenPage(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyFriendsMain() {
     var screenShowing by remember {
@@ -51,12 +57,16 @@ fun MyFriendsMain() {
     }
 
     Column {
-        TabRow(selectedTabIndex = ProfileScreenPage.tabs().indexOf(screenShowing)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+        ) {
             ProfileScreenPage.tabs().forEach { screen ->
-                Tab(
-                    text = { Text(text = screen.label) },
+                FilterChip(
                     selected = screen == screenShowing,
-                    onClick = { screenShowing = screen })
+                    onClick = { screenShowing = screen },
+                    label = { Text(screen.label) },
+                )
             }
         }
 
@@ -74,10 +84,9 @@ fun MyFriendsScreen(
 ) {
     val items = myFriendsPagingViewModel.pager.collectAsLazyPagingItems()
     GenericLazyPager(items = items) { user ->
-        UserHorizontalBarItem(
-            user.name,
+        UserHorizontalBar(
+            { Text(user.name) },
             user.profilePictureUrl,
-            trailingText = { it }
         )
     }
 }
@@ -88,18 +97,13 @@ fun FriendsSentToMeScreen(
 ) {
     val items = friendsSentToMePagingViewModel.pager.collectAsLazyPagingItems()
     GenericLazyPager(items = items) { user ->
-        UserHorizontalBarItem(
-            user.name,
+        UserHorizontalBar(
+            { Text(user.name) },
             user.profilePictureUrl,
-            trailingText = { it }
         ) {
             Row {
-                Button(onClick = { friendsSentToMePagingViewModel.accept(user.id) }) {
-                    Text("Accept")
-                }
-                Button(onClick = { friendsSentToMePagingViewModel.decline(user.id) }) {
-                    Text("Decline")
-                }
+                CheckButton(action = { friendsSentToMePagingViewModel.accept(user.id) })
+                CancelButton(action = { friendsSentToMePagingViewModel.decline(user.id) })
             }
         }
     }
@@ -111,10 +115,20 @@ fun FriendsISentScreen(
 ) {
     val items = friendsISentPagingViewModel.pager.collectAsLazyPagingItems()
     GenericLazyPager(items = items) { user ->
-        UserHorizontalBarItem(
-            user.name,
+        UserHorizontalBar(
+            { Text(user.name) },
             user.profilePictureUrl,
-            trailingText = { it }
-        )
+        ) {
+            Row {
+                CancelButton(action = { friendsISentPagingViewModel.cancel(user.id) })
+            }
+        }
     }
+}
+
+@Composable
+fun FriendISentRow(
+    vm: FriendISentViewModel = hiltViewModel()
+) {
+
 }

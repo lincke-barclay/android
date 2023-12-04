@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.alth.events.database.models.events.derived.SearchEventResult
-import com.alth.events.ui.components.GenericLazyPager
+import com.alth.events.ui.features.common.GenericLazyPager
 import com.alth.events.ui.features.search.events.eventitem.SearchEventItem
 
 @Composable

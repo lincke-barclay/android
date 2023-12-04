@@ -1,50 +1,68 @@
 package com.alth.events.ui.features.feed
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.alth.events.R
-import com.alth.events.ui.features.feed.components.StatefulLazyListFeed
-import com.alth.events.ui.features.feed.viewmodels.FeedMainViewModel
-import com.alth.events.ui.layouts.BottomAppNavBar
-import com.alth.events.ui.navigation.BottomAppBarRoute
+import com.alth.events.ui.features.feed.viewmodels.PagingFeedViewModel
+import kotlinx.coroutines.launch
 
+/**
+ * Feed Entry point - Renders a Modal Navigation Drawer with content inside
+ */
 @Composable
 fun Feed(
-    feedMainViewModel: FeedMainViewModel = hiltViewModel(),
+    pagingFeedViewModel: PagingFeedViewModel = hiltViewModel(),
     navigateToNewEvent: () -> Unit,
     navigateToProfile: () -> Unit,
     navigateToSearch: () -> Unit,
 ) {
-    val feedEvents = feedMainViewModel.eventPagingFlow.collectAsLazyPagingItems()
+    val eventPagerFlow by pagingFeedViewModel.eventPagerFlow.collectAsState()
+    val feedEvents = eventPagerFlow.collectAsLazyPagingItems()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick = { navigateToNewEvent() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_add_24),
-                    contentDescription = "foo"
-                )
-            }
-        },
-        bottomBar = {
-            BottomAppNavBar(
-                navigateToFeed = { /* nothing to do */ },
-                navigateToProfile = navigateToProfile,
-                navigateToSearch = navigateToSearch,
-                currentRoute = BottomAppBarRoute.Feed,
+    val feedMetaState by pagingFeedViewModel.feedMetaState.collectAsState()
+
+    ModalNavigationDrawer(
+        modifier = Modifier
+            .fillMaxSize(),
+        drawerState = drawerState,
+        drawerContent = {
+            FeedInnerDrawerContent(
+                feedMetaState = feedMetaState,
+
+                /**
+                 * Callbacks
+                 */
+                onClickNewDisplayOption = pagingFeedViewModel::onChangeDisplayOption,
+                refresh = pagingFeedViewModel::refresh,
+                toggleIncludeInvited = pagingFeedViewModel::onToggleInvitedCheck,
+                toggleIncludeMyFriendsEvents = pagingFeedViewModel::onToggleMyFriendsCheck,
+                toggleIncludePublicEvents = pagingFeedViewModel::onTogglePublicCheck,
+                changeFromDateTime = pagingFeedViewModel::onChangeStartDateTime,
+                changeToDateTime = pagingFeedViewModel::onChangeEndDateTime,
             )
         },
-    ) { padding ->
-        StatefulLazyListFeed(
-            events = feedEvents,
-            modifier = Modifier.padding(padding),
+    ) {
+        FeedOuterDrawerContent(
+            feedEvents = feedEvents,
+            navigateToNewEvent = navigateToNewEvent,
+            navigateToProfile = navigateToProfile,
+            navigateToSearch = navigateToSearch,
+            openDrawer = {
+                scope.launch {
+                    drawerState.open()
+                }
+            },
+            feedMetaState.displayMode,
         )
     }
 }

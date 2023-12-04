@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.alth.events.data.repositories.paging.events.EventQueryPagerRepository
 import com.alth.events.database.models.events.derived.SearchEventResult
-import com.alth.events.models.domain.events.PublicEventQuery
+import com.alth.events.models.events.EventQuery
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +25,7 @@ class PagingSearchEventsAfterQuerySubmitViewModel @Inject constructor(
     // TODO
     fun onQuerySubmit(newQuery: String) {
         _searchEventsFlow.value =
-            eventQueryPagerRepository.searchPager(PublicEventQuery(titleContainsIC = newQuery))
+            eventQueryPagerRepository.searchPager(EventQuery(titleContainsIgnoreCase = newQuery))
                 .cachedIn(viewModelScope)
     }
 }

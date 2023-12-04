@@ -1,7 +1,7 @@
 package com.alth.events.data.caching
 
 import com.alth.events.logging.impl.loggerFactory
-import com.alth.events.models.domain.CacheGetResult
+import com.alth.events.models.CacheGetResult
 import com.alth.events.networking.models.NetworkResult
 import kotlinx.coroutines.CoroutineScope
 

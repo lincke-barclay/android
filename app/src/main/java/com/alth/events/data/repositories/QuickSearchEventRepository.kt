@@ -7,7 +7,7 @@ import com.alth.events.database.models.events.derived.SearchEventResult
 import com.alth.events.database.sources.events.SearchEventsLocalDataSource
 import com.alth.events.database.sources.users.UserLocalDataSource
 import com.alth.events.logging.impl.loggerFactory
-import com.alth.events.models.domain.events.PublicEventQuery
+import com.alth.events.models.events.EventQuery
 import com.alth.events.networking.models.NetworkResult
 import com.alth.events.networking.sources.NetworkEventDataSource
 import com.alth.events.transforms.domain.toSearchEventResultList
@@ -29,7 +29,7 @@ class QuickSearchEventRepository @Inject constructor(
     val results = _results.asStateFlow()
 
     // TODO - is this faster as a sql query?
-    suspend fun onQueryChange(query: PublicEventQuery) {
+    suspend fun onQueryChange(query: EventQuery) {
         logger.debug("New query: $query")
         _results.value = authenticationDataSource.withIDOrThrow { myId ->
             userLocalDataSource.getPublicUsersWithTheirEvents()
@@ -43,14 +43,14 @@ class QuickSearchEventRepository @Inject constructor(
         }
     }
 
-    suspend fun populateCache(query: PublicEventQuery) {
+    suspend fun populateCache(query: EventQuery) {
         logger.debug("Populating cache for query like: $query")
         val response = networkEventDataSource.getEventsByQueryParameters(
             fromStartDateTimeInclusive = query.fromStartDateTimeInclusive,
             fromEndDateTimeInclusive = query.fromEndDateTimeInclusive,
             toStartDateTimeInclusive = query.toStartDateTimeInclusive,
             toEndDateTimeInclusive = query.toEndDateTimeInclusive,
-            titleContainsIC = query.titleContainsIC,
+            titleContainsIC = query.titleContainsIgnoreCase,
             sortBy = query.sortBy,
             sortDirection = query.sortDirection,
             limit = sizeLimit,

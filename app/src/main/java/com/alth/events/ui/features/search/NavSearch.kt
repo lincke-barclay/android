@@ -4,16 +4,16 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.alth.events.ui.navigation.BottomAppBarRoute
+import com.alth.events.ui.navigation.RootRoute
+import com.alth.events.ui.navigation.navigateBack
 import com.alth.events.ui.navigation.navigateToFeed
 import com.alth.events.ui.navigation.navigateToProfile
 
 fun NavGraphBuilder.searchNavGraph(navController: NavHostController) {
-    navigation(startDestination = "search/main", route = BottomAppBarRoute.Search.route) {
+    navigation(startDestination = "search/main", route = RootRoute.Search.route) {
         composable("search/main") {
-            SearchMain(
-                navigateToProfile = navController::navigateToProfile,
-                navigateToFeed = navController::navigateToFeed,
+            Search(
+                navigateBack = navController::navigateBack,
             )
         }
     }

@@ -10,7 +10,7 @@ import com.alth.events.data.caching.events.MyQueriedEventsCachingManager
 import com.alth.events.data.mediators.events.MyEventsRemoteMediator
 import com.alth.events.database.models.events.derived.AnonymousEvent
 import com.alth.events.database.sources.events.MyEventsLocalDataSource
-import com.alth.events.models.domain.events.PublicEventQuery
+import com.alth.events.models.events.EventQuery
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -22,7 +22,7 @@ class PagingMyEventsRepository @Inject constructor(
 ) {
     private val pageSize = 20 // TODO - configure this in application properties
 
-    suspend fun myEventsFlow(query: PublicEventQuery): Flow<PagingData<AnonymousEvent>> {
+    suspend fun myEventsFlow(query: EventQuery): Flow<PagingData<AnonymousEvent>> {
         val myEventsRemoteMediator = MyEventsRemoteMediator(
             myQueriedEventsCachingManager = myQueriedEventsCachingManager,
             searchQuery = query,

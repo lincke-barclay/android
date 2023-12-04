@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.room.Transaction
 import com.alth.events.database.dao.events.SearchEventDao
 import com.alth.events.database.models.events.derived.SearchEventResult
-import com.alth.events.models.domain.events.PublicEventQuery
+import com.alth.events.models.events.EventQuery
 import com.alth.events.networking.models.events.ingress.PublicEventResponseDto
 import com.alth.events.transforms.networkToDatabase.toQueriedEvent
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class SearchEventsLocalDataSource @Inject constructor(
     @Transaction
     suspend fun upsertNewSearchEventsByQuery(
         events: List<PublicEventResponseDto>,
-        query: PublicEventQuery
+        query: EventQuery
     ) {
         localEventDataSource.upsertAll(events)
         searchEventDao.upsertAll(events.map { it.toQueriedEvent(query) })

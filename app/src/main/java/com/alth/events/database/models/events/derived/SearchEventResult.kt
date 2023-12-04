@@ -3,7 +3,7 @@ package com.alth.events.database.models.events.derived
 import androidx.room.ColumnInfo
 import com.alth.events.database.models.events.EventEntity
 import com.alth.events.database.models.users.PublicUserEntity
-import com.alth.events.models.domain.events.PublicEventQuery
+import com.alth.events.models.events.EventQuery
 import kotlinx.datetime.Instant
 
 data class SearchEventResult(
@@ -15,7 +15,8 @@ data class SearchEventResult(
     val shortDescription: String,
     val longDescription: String,
 ) {
-    fun matches(query: PublicEventQuery): Boolean {
+
+    fun matches(query: EventQuery): Boolean {
         val startDateTimeLessThan = query.toStartDateTimeInclusive?.let {
             startDateTime < it
         } ?: true
@@ -28,7 +29,7 @@ data class SearchEventResult(
         val endDateTimeGreaterThan = query.fromEndDateTimeInclusive?.let {
             endDateTime > it
         } ?: true
-        val titleMatches = query.titleContainsIC?.let {
+        val titleMatches = query.titleContainsIgnoreCase?.let {
             it.lowercase() in title.lowercase()
         } ?: true
 

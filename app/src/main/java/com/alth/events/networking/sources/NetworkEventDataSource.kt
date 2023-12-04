@@ -2,11 +2,10 @@ package com.alth.events.networking.sources
 
 import com.alth.events.authentication.sources.AuthenticationDataSource
 import com.alth.events.logging.impl.loggerFactory
+import com.alth.events.models.SortDirection
+import com.alth.events.models.events.EventSortBy
 import com.alth.events.networking.apis.EventsApi
 import com.alth.events.networking.models.NetworkResult
-import com.alth.events.networking.models.PrivateEventSortBy
-import com.alth.events.networking.models.PublicEventSortBy
-import com.alth.events.networking.models.SortDirection
 import com.alth.events.networking.models.events.egress.POSTEventRequestDTO
 import com.alth.events.networking.models.events.ingress.MinimalEventListResponseDto
 import com.alth.events.networking.models.events.ingress.PrivateEventResponseDto
@@ -27,7 +26,7 @@ class NetworkEventDataSource @Inject constructor(
         toStartDateTimeInclusive: Instant? = null,
         toEndDateTimeInclusive: Instant? = null,
         titleContainsIC: String? = null,
-        sortBy: PrivateEventSortBy? = null,
+        sortBy: EventSortBy? = null,
         sortDirection: SortDirection? = null,
         limit: Int,
     ): NetworkResult<List<PrivateEventResponseDto>> {
@@ -79,7 +78,7 @@ class NetworkEventDataSource @Inject constructor(
         toStartDateTimeInclusive: Instant? = null,
         toEndDateTimeInclusive: Instant? = null,
         titleContainsIC: String? = null,
-        sortBy: PublicEventSortBy? = null,
+        sortBy: EventSortBy? = null,
         sortDirection: SortDirection? = null,
         limit: Int,
     ): NetworkResult<MinimalEventListResponseDto> {

@@ -7,13 +7,13 @@ import androidx.paging.RemoteMediator
 import com.alth.events.data.caching.events.MyQueriedEventsCachingManager
 import com.alth.events.database.models.events.derived.AnonymousEvent
 import com.alth.events.logging.impl.loggerFactory
-import com.alth.events.models.domain.events.PublicEventQuery
+import com.alth.events.models.events.EventQuery
 import com.alth.events.networking.models.NetworkResult
 
 @OptIn(ExperimentalPagingApi::class)
 class MyEventsRemoteMediator(
     private val myQueriedEventsCachingManager: MyQueriedEventsCachingManager,
-    private val searchQuery: PublicEventQuery,
+    private val searchQuery: EventQuery,
 ) : RemoteMediator<Int, AnonymousEvent>() {
     private val logger = loggerFactory.getLogger(this)
 

@@ -3,7 +3,7 @@ package com.alth.events.authentication.sources
 import com.alth.events.exceptions.IllegalAuthenticationStateException
 
 suspend fun <T> AuthenticationDataSource.withTokenOrThrow(body: suspend (String) -> T): T {
-    return getAuthenticationTokenOrNull()?.let {
+    return getAuthenticationTokenOrNull(false)?.let {
         body(it)
     } ?: throw IllegalAuthenticationStateException("User is not signed in!")
 }

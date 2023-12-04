@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alth.events.data.repositories.AuthenticationRepository
-import com.alth.events.models.domain.authentication.results.ChangeNameResult
+import com.alth.events.models.authentication.results.ChangeNameResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

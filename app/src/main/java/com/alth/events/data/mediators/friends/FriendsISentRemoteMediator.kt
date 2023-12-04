@@ -8,7 +8,7 @@ import com.alth.events.data.caching.friends.PendingFriendsISentCachingManager
 import com.alth.events.database.models.users.PublicUserEntity
 import com.alth.events.database.sources.friendships.FriendshipLocalDataSource
 import com.alth.events.logging.impl.loggerFactory
-import com.alth.events.models.domain.friends.FriendsQuery
+import com.alth.events.models.friends.FriendsQuery
 import com.alth.events.networking.models.NetworkResult
 import javax.inject.Inject
 

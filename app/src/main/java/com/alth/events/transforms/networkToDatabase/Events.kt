@@ -3,7 +3,7 @@ package com.alth.events.transforms.networkToDatabase
 import com.alth.events.database.models.events.EventEntity
 import com.alth.events.database.models.events.FeedEventEntity
 import com.alth.events.database.models.events.QueriedEventEntity
-import com.alth.events.models.domain.events.PublicEventQuery
+import com.alth.events.models.events.EventQuery
 import com.alth.events.networking.models.events.ingress.PrivateEventResponseDto
 import com.alth.events.networking.models.events.ingress.PublicEventResponseDto
 
@@ -23,7 +23,7 @@ fun PublicEventResponseDto.toFeedEventEntity(): FeedEventEntity {
     return FeedEventEntity(eventId = id)
 }
 
-fun PublicEventResponseDto.toQueriedEvent(query: PublicEventQuery): QueriedEventEntity {
+fun PublicEventResponseDto.toQueriedEvent(query: EventQuery): QueriedEventEntity {
     return QueriedEventEntity(
         eventId = id,
         serializedQuery = query.toUniqueId(),

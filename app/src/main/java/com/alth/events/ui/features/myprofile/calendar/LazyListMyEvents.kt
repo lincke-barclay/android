@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.alth.events.database.models.events.derived.AnonymousEvent
-import com.alth.events.ui.components.IndeterminateCircularIndicator
+import com.alth.events.ui.features.common.IndeterminateCircularIndicator
 import com.alth.events.ui.features.myprofile.calendar.eventitem.MyEventItem
 import eu.bambooapps.material3.pullrefresh.pullRefresh
 import eu.bambooapps.material3.pullrefresh.rememberPullRefreshState

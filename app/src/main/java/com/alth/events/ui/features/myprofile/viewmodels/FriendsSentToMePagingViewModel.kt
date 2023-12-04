@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.alth.events.data.caching.friends.MyConfirmedFriendsCachingManager
 import com.alth.events.data.repositories.paging.friends.PendingFriendsSentToMePagerRepository
-import com.alth.events.models.domain.friends.FriendsQuery
+import com.alth.events.models.friends.FriendsQuery
 import com.alth.events.networking.sources.NetworkFriendshipDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

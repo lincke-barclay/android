@@ -7,14 +7,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.alth.events.database.models.users.PublicUserEntity
-import com.alth.events.ui.components.GenericLazyPager
-import com.alth.events.ui.components.UserHorizontalBarItem
+import com.alth.events.ui.features.common.GenericLazyPager
+import com.alth.events.ui.features.users.UserHorizontalBar
 
 @Composable
 fun LazyListSearchUserResult(
@@ -23,10 +24,9 @@ fun LazyListSearchUserResult(
 ) {
     GenericLazyPager(items = users, modifier = modifier) {
         Column(Modifier.padding(bottom = 12.dp)) {
-            UserHorizontalBarItem(
-                name = it.name,
+            UserHorizontalBar(
+                label = { Text(it.name) },
                 profilePictureUrl = it.profilePictureUrl,
-                trailingText = { it }
             )
             Divider(thickness = 3.dp)
         }
@@ -46,10 +46,9 @@ fun LimitedLazyListSearchUserResult(
             items(users.size) { userId ->
                 val user = users[userId]
                 Column(Modifier.padding(bottom = 12.dp)) {
-                    UserHorizontalBarItem(
-                        name = user.name,
+                    UserHorizontalBar(
+                        label = { Text(user.name) },
                         profilePictureUrl = user.profilePictureUrl,
-                        trailingText = { it }
                     )
                     Divider(thickness = 3.dp)
                 }

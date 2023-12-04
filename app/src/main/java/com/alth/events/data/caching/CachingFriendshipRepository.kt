@@ -1,6 +1,6 @@
 package com.alth.events.data.caching
 
-import com.alth.events.di.ApplicationScope
+import com.alth.events.coroutines.ApplicationScope
 import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
 import com.alth.events.networking.sources.NetworkFriendshipDataSource
 import kotlinx.coroutines.CoroutineScope

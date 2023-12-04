@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
-import com.alth.events.ui.viewmodels.OtherProfileViewModel
 
 @Composable
 fun OtherProfile(

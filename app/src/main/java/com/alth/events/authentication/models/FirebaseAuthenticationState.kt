@@ -1,7 +1,7 @@
 package com.alth.events.authentication.models
 
 import com.alth.events.logging.impl.loggerFactory
-import com.alth.events.models.domain.authentication.AuthenticationState
+import com.alth.events.models.authentication.AuthenticationState
 import com.google.firebase.auth.FirebaseUser
 
 sealed interface FirebaseAuthenticationState {

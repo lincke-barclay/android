@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alth.events.data.repositories.AuthenticationRepository
-import com.alth.events.models.domain.authentication.results.SignUpResult
+import com.alth.events.models.authentication.results.SignUpResult
 import com.alth.events.util.isEmailValid
 import com.alth.events.util.isPasswordValid
 import dagger.hilt.android.lifecycle.HiltViewModel

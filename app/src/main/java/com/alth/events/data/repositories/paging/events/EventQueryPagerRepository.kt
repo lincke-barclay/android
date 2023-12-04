@@ -9,7 +9,7 @@ import com.alth.events.data.mediators.events.QueriedEventRemoteMediator
 import com.alth.events.database.models.events.derived.SearchEventResult
 import com.alth.events.database.sources.events.SearchEventsLocalDataSource
 import com.alth.events.logging.impl.loggerFactory
-import com.alth.events.models.domain.events.PublicEventQuery
+import com.alth.events.models.events.EventQuery
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class EventQueryPagerRepository @Inject constructor(
     private val pageSize = 20 // TODO - configure this in application properties
     private val logger = loggerFactory.getLogger(this)
 
-    fun searchPager(query: PublicEventQuery): Flow<PagingData<SearchEventResult>> {
+    fun searchPager(query: EventQuery): Flow<PagingData<SearchEventResult>> {
         logger.debug("Creating new search event mediator for query: $query")
         val mediator = QueriedEventRemoteMediator(
             queriedEventsCachingManager,

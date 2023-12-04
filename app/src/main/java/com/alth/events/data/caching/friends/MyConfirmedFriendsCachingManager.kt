@@ -5,7 +5,7 @@ import com.alth.events.database.models.friends.FriendType
 import com.alth.events.database.models.friends.FriendshipEntity
 import com.alth.events.database.sources.friendships.FriendshipLocalDataSource
 import com.alth.events.database.sources.users.UserLocalDataSource
-import com.alth.events.models.domain.friends.FriendsQuery
+import com.alth.events.models.friends.FriendsQuery
 import com.alth.events.networking.models.NetworkResult
 import com.alth.events.networking.models.users.ingress.PublicUserResponseDto
 import com.alth.events.networking.sources.NetworkFriendshipDataSource

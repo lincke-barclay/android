@@ -2,7 +2,7 @@ package com.alth.events.data.repositories
 
 import com.alth.events.authentication.sources.AuthenticationDataSource
 import com.alth.events.logging.impl.loggerFactory
-import com.alth.events.models.domain.authentication.AuthenticationState
+import com.alth.events.models.authentication.AuthenticationState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alth.events.data.repositories.QuickSearchEventRepository
 import com.alth.events.logging.impl.loggerFactory
-import com.alth.events.models.domain.events.PublicEventQuery
+import com.alth.events.models.events.EventQuery
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -25,8 +25,8 @@ class QuickSearchEventsResultsViewModel @Inject constructor(
     }
 
     fun onQueryChange(newQuery: String) {
-        val query = PublicEventQuery(
-            titleContainsIC = newQuery,
+        val query = EventQuery(
+            titleContainsIgnoreCase = newQuery,
         )
         if (!queryChangeJob.isActive) {
             queryChangeJob = viewModelScope.launch {

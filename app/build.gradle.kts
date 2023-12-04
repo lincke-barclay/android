@@ -14,6 +14,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
+        multiDexEnabled = true
         applicationId = "com.alth.events"
         minSdk = 24
         targetSdk = 34
@@ -43,6 +44,7 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -125,4 +127,7 @@ dependencies {
 
     // Image cropper
     implementation("com.vanniktech:android-image-cropper:4.5.0")
+
+    // Core De sugaring For Java 8+ libs
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

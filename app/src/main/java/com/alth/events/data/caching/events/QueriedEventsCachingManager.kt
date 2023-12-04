@@ -4,10 +4,10 @@ import com.alth.events.database.DatabaseTransactionUseCase
 import com.alth.events.database.models.events.derived.SearchEventResult
 import com.alth.events.database.sources.events.SearchEventsLocalDataSource
 import com.alth.events.database.sources.users.UserLocalDataSource
-import com.alth.events.models.domain.events.PublicEventQuery
+import com.alth.events.models.SortDirection
+import com.alth.events.models.events.EventQuery
 import com.alth.events.networking.models.NetworkResult
-import com.alth.events.networking.models.PublicEventSortBy
-import com.alth.events.networking.models.SortDirection
+import com.alth.events.models.events.EventSortBy
 import com.alth.events.networking.models.events.ingress.MinimalEventListResponseDto
 import com.alth.events.networking.sources.NetworkEventDataSource
 import javax.inject.Inject
@@ -19,7 +19,7 @@ class QueriedEventsCachingManager @Inject constructor(
     private val transaction: DatabaseTransactionUseCase,
 ) {
     suspend fun updateLocalSearchResultsForQuery(
-        query: PublicEventQuery,
+        query: EventQuery,
         limit: Int,
         invalidateCache: Boolean,
         lastEventConsumed: SearchEventResult? = null, // For paging
@@ -27,7 +27,7 @@ class QueriedEventsCachingManager @Inject constructor(
         // Find next query based on last event result
         val nextQuery = lastEventConsumed?.let {
             when (query.sortBy) {
-                PublicEventSortBy.StartDateTime -> when (query.sortDirection) {
+                EventSortBy.StartDateTime -> when (query.sortDirection) {
                     SortDirection.ASC -> query.copy(
                         fromStartDateTimeInclusive = it.startDateTime,
                     )
@@ -37,7 +37,7 @@ class QueriedEventsCachingManager @Inject constructor(
                     )
                 }
 
-                PublicEventSortBy.EndDateTime -> when (query.sortDirection) {
+                EventSortBy.EndDateTime -> when (query.sortDirection) {
                     SortDirection.ASC -> query.copy(
                         fromEndDateTimeInclusive = it.endDateTime,
                     )
@@ -54,7 +54,7 @@ class QueriedEventsCachingManager @Inject constructor(
             fromEndDateTimeInclusive = nextQuery.fromEndDateTimeInclusive,
             toStartDateTimeInclusive = nextQuery.toStartDateTimeInclusive,
             toEndDateTimeInclusive = nextQuery.toEndDateTimeInclusive,
-            titleContainsIC = nextQuery.titleContainsIC,
+            titleContainsIC = nextQuery.titleContainsIgnoreCase,
             sortBy = nextQuery.sortBy,
             sortDirection = nextQuery.sortDirection,
             limit = limit,
